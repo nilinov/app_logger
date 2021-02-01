@@ -15,15 +15,15 @@ part 'device_info.dart';
 part 'app_logger_bloc_observer.dart';
 
 
-class Logger {
-  static final Logger _singleton = Logger._internal();
+class AppLogger {
+  static final AppLogger _singleton = AppLogger._internal();
   String path;
 
-  factory Logger() {
+  factory AppLogger() {
     return _singleton;
   }
 
-  Logger._internal();
+  AppLogger._internal();
 
   DeviceInfo deviceInfo;
   int sessionId = 0;

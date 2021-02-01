@@ -5,7 +5,7 @@ class AppLoggerBlocObserver extends BlocObserver {
   void onCreate(Cubit cubit) {
     super.onCreate(cubit);
     print('onCreate -- cubit: ${cubit.runtimeType}');
-    Logger().addBloc(cubit.runtimeType.toString(), cubit.state);
+    AppLogger().addBloc(cubit.runtimeType.toString(), cubit.state);
   }
 
   @override
@@ -19,7 +19,7 @@ class AppLoggerBlocObserver extends BlocObserver {
     super.onChange(cubit, change);
     print('onChange -- cubit: ${cubit.runtimeType}, change: $change');
     if (cubit.runtimeType.toString().contains('Cubit')) {
-      Logger().onChangeBloc(cubit.runtimeType.toString(), change.currentState, change.nextState);
+      AppLogger().onChangeBloc(cubit.runtimeType.toString(), change.currentState, change.nextState);
     }
   }
 
@@ -27,7 +27,7 @@ class AppLoggerBlocObserver extends BlocObserver {
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
     print('onTransition -- bloc: ${bloc.runtimeType}, transition: $transition');
-    Logger().onTransitionBloc(bloc.runtimeType.toString(), transition.currentState, transition.nextState,
+    AppLogger().onTransitionBloc(bloc.runtimeType.toString(), transition.currentState, transition.nextState,
         transition.event.runtimeType.toString());
   }
 
@@ -41,7 +41,7 @@ class AppLoggerBlocObserver extends BlocObserver {
   void onClose(Cubit cubit) {
     super.onClose(cubit);
     print('onClose -- cubit: ${cubit.runtimeType}');
-    Logger().removeBloc(cubit.runtimeType.toString());
+    AppLogger().removeBloc(cubit.runtimeType.toString());
   }
 }
 

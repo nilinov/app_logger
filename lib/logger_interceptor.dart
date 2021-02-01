@@ -19,9 +19,9 @@ class LoggerInterceptor extends Interceptor {
       Map jsonData = {
         'action': 'device_request',
         'payload': {
-          'device_identifier': Logger().deviceInfo.identifier,
-          'session_id': Logger().sessionId,
-          'project': Logger().project,
+          'device_identifier': AppLogger().deviceInfo.identifier,
+          'session_id': AppLogger().sessionId,
+          'project': AppLogger().project,
           'number': countRequest,
           'url': options.uri.toString(),
           'code': null,
@@ -40,7 +40,7 @@ class LoggerInterceptor extends Interceptor {
         }
       };
 
-      Logger().channel.sink.add(jsonEncode(jsonData));
+      AppLogger().channel.sink.add(jsonEncode(jsonData));
 
     } catch (e) {
       print(e);
@@ -62,9 +62,9 @@ class LoggerInterceptor extends Interceptor {
       Map jsonData = {
         'action': 'device_request',
         'payload': {
-          'device_identifier': Logger().deviceInfo.identifier,
-          'session_id': Logger().sessionId,
-          'project': Logger().project,
+          'device_identifier': AppLogger().deviceInfo.identifier,
+          'session_id': AppLogger().sessionId,
+          'project': AppLogger().project,
           'number': number,
           'url': response.request.uri.toString(),
           'code': response.statusCode,
@@ -84,7 +84,7 @@ class LoggerInterceptor extends Interceptor {
               .length,
         }
       };
-      Logger().channel.sink.add(jsonEncode(jsonData));
+      AppLogger().channel.sink.add(jsonEncode(jsonData));
     } catch (e) {
       print(e);
     }
@@ -105,9 +105,9 @@ class LoggerInterceptor extends Interceptor {
       Map jsonData = {
         'action': 'device_request',
         'payload': {
-          'device_identifier': Logger().deviceInfo.identifier,
-          'session_id': Logger().sessionId,
-          'project': Logger().project,
+          'device_identifier': AppLogger().deviceInfo.identifier,
+          'session_id': AppLogger().sessionId,
+          'project': AppLogger().project,
           'number': number,
           'url': response.request.uri.toString(),
           'code': response.statusCode,
@@ -127,7 +127,7 @@ class LoggerInterceptor extends Interceptor {
               .length,
         }
       };
-      Logger().channel.sink.add(jsonEncode(jsonData));
+      AppLogger().channel.sink.add(jsonEncode(jsonData));
     } catch (e) {
       print(e);
     }
