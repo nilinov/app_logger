@@ -4,7 +4,7 @@ class AppLoggerBlocObserver extends BlocObserver {
   @override
   void onCreate(Cubit cubit) {
     super.onCreate(cubit);
-    print('onCreate -- cubit: ${cubit.runtimeType}');
+    // print('onCreate -- cubit: ${cubit.runtimeType}');
     AppLogger().addBloc(cubit.runtimeType.toString(), cubit.state);
   }
 
@@ -17,7 +17,7 @@ class AppLoggerBlocObserver extends BlocObserver {
   @override
   void onChange(Cubit cubit, Change change) {
     super.onChange(cubit, change);
-    print('onChange -- cubit: ${cubit.runtimeType}, change: $change');
+    // print('onChange -- cubit: ${cubit.runtimeType}, change: $change');
     if (cubit.runtimeType.toString().contains('Cubit')) {
       AppLogger().onChangeBloc(cubit.runtimeType.toString(), change.currentState, change.nextState);
     }
@@ -26,14 +26,24 @@ class AppLoggerBlocObserver extends BlocObserver {
   @override
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
-    print('onTransition -- bloc: ${bloc.runtimeType}, transition: $transition');
-    AppLogger().onTransitionBloc(bloc.runtimeType.toString(), transition.currentState, transition.nextState,
-        transition.event.runtimeType.toString());
+    // print('onTransition -- bloc: ${bloc.runtimeType}, transition: $transition');
+    AppLogger().onTransitionBloc(
+      bloc.runtimeType.toString(),
+      transition.currentState,
+      transition.nextState,
+      transition.event.runtimeType.toString(),
+    );
   }
 
   @override
   void onError(Cubit cubit, Object error, StackTrace stackTrace) {
     print('onError -- cubit: ${cubit.runtimeType}, error: $error');
+    // AppLogger().onTransitionBloc(
+    //   bloc.runtimeType.toString(),
+    //   transition.currentState,
+    //   transition.nextState,
+    //   transition.event.runtimeType.toString(),
+    // );
     super.onError(cubit, error, stackTrace);
   }
 
