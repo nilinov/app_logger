@@ -59,6 +59,17 @@ class AppLogger {
 
   List<BlocRecord> blocs = [];
 
+  log(String payload) {
+    this.channel.sink.add(jsonEncode({
+      'action': 'device_log',
+      'payload': {
+        'identifier': deviceInfo.identifier,
+        'project': project,
+        'log': payload,
+      },
+    }));
+  }
+
   addBloc(String name, state) {
     final bloc = BlocRecord(number: blocs.length, name: name, state: state);
     this.blocs.add(bloc);
