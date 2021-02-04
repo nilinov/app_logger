@@ -52,7 +52,7 @@ class AppLogger {
     }));
 
     channel.stream.listen((message) {
-      print(message);
+      // print(message);
       // channel.sink.close(status.goingAway);
     });
   }
