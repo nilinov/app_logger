@@ -10,10 +10,9 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/io.dart';
 
-part 'logger_interceptor.dart';
-part 'device_info.dart';
 part 'app_logger_bloc_observer.dart';
-
+part 'device_info.dart';
+part 'logger_interceptor.dart';
 
 class AppLogger {
   static final AppLogger _singleton = AppLogger._internal();

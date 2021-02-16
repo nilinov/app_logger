@@ -150,9 +150,8 @@ class LoggerInterceptor extends Interceptor {
     }
 
     var data = json.encode(options.data);
-    if (data != null) {
-      data = data.replaceAll('\"', '\\\"');
-      components.add("-d \"$data\"");
+    if (data != null && data != "null") {
+      components.add("-d $data");
     }
 
     components.add("\"${options.uri.toString()}\"");
