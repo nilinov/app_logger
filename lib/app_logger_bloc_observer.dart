@@ -11,7 +11,7 @@ class AppLoggerBlocObserver extends BlocObserver {
   @override
   void onEvent(Bloc bloc, Object event) {
     super.onEvent(bloc, event);
-    print('onEvent -- bloc: ${bloc.runtimeType}, event: $event');
+    // print('onEvent -- bloc: ${bloc.runtimeType}, event: $event');
   }
 
   @override
@@ -38,6 +38,7 @@ class AppLoggerBlocObserver extends BlocObserver {
   @override
   void onError(Cubit cubit, Object error, StackTrace stackTrace) {
     print('onError -- cubit: ${cubit.runtimeType}, error: $error');
+    // AppLogger().onChangeBloc(cubit.runtimeType.toString(), change.currentState, change.nextState);
     // AppLogger().onTransitionBloc(
     //   bloc.runtimeType.toString(),
     //   transition.currentState,
