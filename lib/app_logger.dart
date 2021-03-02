@@ -64,6 +64,7 @@ class AppLogger {
       'payload': {
         'identifier': deviceInfo.identifier,
         'project': project,
+        'sessionId': sessionId,
         'log': payload,
       },
     }));
