@@ -60,28 +60,54 @@ class BlocRecord {
   final int number;
   final String name;
   var state;
+  final DeviceInfo deviceInfo;
+  final String project;
+  final int sessionId;
 
   BlocRecord({
     @required this.number,
     @required this.name,
     @required this.state,
+    @required this.deviceInfo,
+    @required this.project,
+    @required this.sessionId,
   });
 
-  Map<String, dynamic> toJson() => {"number": number, "name": name, "state": state};
+  Map<String, dynamic> toJson() => {
+        "number": number,
+        "name": name,
+        "state": state,
+        "deviceInfo": deviceInfo,
+        "project": project,
+        "sessionId": sessionId,
+      };
 
-  String toString() => "BlocRecord[number=$number,name=$name,state=$state]";
+  String toString() =>
+      "BlocRecord[number=$number,name=$name,state=$state, deviceInfo: $deviceInfo, project: $project, sessionId: $sessionId]";
 }
 
 class DeviceRequestActionBlocOnCreated {
   final String action;
   final List<BlocRecord> payload;
+  final DeviceInfo deviceInfo;
+  final String project;
+  final int sessionId;
 
   DeviceRequestActionBlocOnCreated({
     this.action = 'onCreate',
     @required this.payload,
+    @required this.deviceInfo,
+    @required this.project,
+    @required this.sessionId,
   });
 
-  Map<String, dynamic> toMap() => {"action": action, "payload": payload};
+  Map<String, dynamic> toMap() => {
+        "action": action,
+        "payload": payload,
+        "deviceInfo": deviceInfo,
+        "project": project,
+        "sessionId": sessionId,
+      };
 }
 
 class DeviceRequestActionBlocOnClose {
@@ -102,9 +128,6 @@ class BlocStateDiff {
   final String bloc;
   final String eventName;
   final bool isBloc;
-  final DeviceInfo deviceInfo;
-  final String project;
-  final int sessionId;
 
   BlocStateDiff({
     @required this.currentState,
@@ -112,9 +135,6 @@ class BlocStateDiff {
     @required this.bloc,
     @required this.eventName,
     @required this.isBloc,
-    @required this.deviceInfo,
-    @required this.project,
-    @required this.sessionId,
   });
 
   Map<String, dynamic> toJson() => {
@@ -123,32 +143,53 @@ class BlocStateDiff {
         "bloc": bloc,
         "eventName": eventName,
         "isBloc": isBloc,
-        "deviceInfo": deviceInfo,
-        "project": project,
-        "sessionId": sessionId,
       };
 }
 
 class DeviceRequestActionBlocOnChange {
   final String action;
   final BlocStateDiff payload;
+  final DeviceInfo deviceInfo;
+  final String project;
+  final int sessionId;
 
   DeviceRequestActionBlocOnChange({
     this.action = 'onChange',
     @required this.payload,
+    @required this.deviceInfo,
+    @required this.project,
+    @required this.sessionId,
   });
 
-  Map<String, dynamic> toJson() => {"action": action, "payload": payload};
+  Map<String, dynamic> toJson() => {
+        "action": action,
+        "payload": payload,
+        "deviceInfo": deviceInfo,
+        "project": project,
+        "sessionId": sessionId,
+      };
 }
 
 class DeviceRequestActionBlocOnTransition {
   final String action;
   final BlocStateDiff payload;
+  final DeviceInfo deviceInfo;
+  final String project;
+  final int sessionId;
 
   DeviceRequestActionBlocOnTransition({
     this.action = 'onTransition',
     @required this.payload,
+    @required this.deviceInfo,
+    @required this.project,
+    @required this.sessionId,
   });
 
-  Map<String, dynamic> toJson() => {"action": action, "payload": payload};
+  Map<String, dynamic> toJson() => {
+        "action": action,
+        "payload": payload,
+        "deviceInfo": deviceInfo,
+        "project": project,
+        "sessionId": sessionId,
+      };
 }

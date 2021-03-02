@@ -71,9 +71,21 @@ class AppLogger {
   }
 
   addBloc(String name, state) {
-    final bloc = BlocRecord(number: blocs.length, name: name, state: state);
+    final bloc = BlocRecord(
+      number: blocs.length,
+      name: name,
+      state: state,
+      deviceInfo: deviceInfo,
+      project: project,
+      sessionId: sessionId,
+    );
     this.blocs.add(bloc);
-    this.channel.sink.add(jsonEncode(DeviceRequestActionBlocOnCreated(payload: blocs).toMap()));
+    this.channel.sink.add(jsonEncode(DeviceRequestActionBlocOnCreated(
+          payload: blocs,
+          deviceInfo: deviceInfo,
+          project: project,
+          sessionId: sessionId,
+        ).toMap()));
   }
 
   removeBloc(String name) {
@@ -85,16 +97,17 @@ class AppLogger {
   onChangeBloc(String name, state1, state2) {
     try {
       final change = DeviceRequestActionBlocOnChange(
-          payload: BlocStateDiff(
-            bloc: name,
-            currentState: state1,
-            nextState: state2,
-            eventName: null,
-            isBloc: false,
-            project: project,
-            sessionId: sessionId,
-            deviceInfo: deviceInfo,
-          ));
+        payload: BlocStateDiff(
+          bloc: name,
+          currentState: state1,
+          nextState: state2,
+          eventName: null,
+          isBloc: false,
+        ),
+        deviceInfo: deviceInfo,
+        project: project,
+        sessionId: sessionId,
+      );
       this.channel.sink.add(jsonEncode(change));
     } catch (e) {
       print(e);
@@ -104,16 +117,17 @@ class AppLogger {
   onTransitionBloc(String name, state1, state2, String eventName) {
     try {
       final change = DeviceRequestActionBlocOnTransition(
-          payload: BlocStateDiff(
-            bloc: name,
-            currentState: state1,
-            nextState: state2,
-            eventName: eventName,
-            isBloc: true,
-            project: project,
-            sessionId: sessionId,
-            deviceInfo: deviceInfo,
-          ));
+        payload: BlocStateDiff(
+          bloc: name,
+          currentState: state1,
+          nextState: state2,
+          eventName: eventName,
+          isBloc: true,
+        ),
+        deviceInfo: deviceInfo,
+        project: project,
+        sessionId: sessionId,
+      );
       this.channel.sink.add(jsonEncode(change));
     } catch (e) {
       print(e);
