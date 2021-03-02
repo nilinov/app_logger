@@ -117,8 +117,16 @@ class BlocStateDiff {
     @required this.sessionId,
   });
 
-  Map<String, dynamic> toJson() =>
-      {"currentState": currentState, "nextState": nextState, "bloc": bloc, "eventName": eventName, "isBloc": isBloc};
+  Map<String, dynamic> toJson() => {
+        "currentState": currentState,
+        "nextState": nextState,
+        "bloc": bloc,
+        "eventName": eventName,
+        "isBloc": isBloc,
+        "deviceInfo": deviceInfo,
+        "project": project,
+        "sessionId": sessionId,
+      };
 }
 
 class DeviceRequestActionBlocOnChange {
