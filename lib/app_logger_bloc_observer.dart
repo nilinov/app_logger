@@ -102,6 +102,9 @@ class BlocStateDiff {
   final String bloc;
   final String eventName;
   final bool isBloc;
+  final DeviceInfo deviceInfo;
+  final String project;
+  final int sessionId;
 
   BlocStateDiff({
     @required this.currentState,
@@ -109,6 +112,9 @@ class BlocStateDiff {
     @required this.bloc,
     @required this.eventName,
     @required this.isBloc,
+    @required this.deviceInfo,
+    @required this.project,
+    @required this.sessionId,
   });
 
   Map<String, dynamic> toJson() =>

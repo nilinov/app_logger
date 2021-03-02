@@ -90,6 +90,9 @@ class AppLogger {
             nextState: state2,
             eventName: null,
             isBloc: false,
+            project: project,
+            sessionId: sessionId,
+            deviceInfo: deviceInfo,
           ));
       this.channel.sink.add(jsonEncode(change));
     } catch (e) {
@@ -106,6 +109,9 @@ class AppLogger {
             nextState: state2,
             eventName: eventName,
             isBloc: true,
+            project: project,
+            sessionId: sessionId,
+            deviceInfo: deviceInfo,
           ));
       this.channel.sink.add(jsonEncode(change));
     } catch (e) {
