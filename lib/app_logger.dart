@@ -30,6 +30,8 @@ class AppLogger {
   String loggerUrl = '';
   String project;
 
+  List messages = [];
+
   init(String loggerUrl, String project) async {
     this.loggerUrl = loggerUrl;
     this.project = project;
@@ -50,6 +52,12 @@ class AppLogger {
       'payload': deviceInfo,
     }));
 
+    if (messages.isNotEmpty) {
+      messages.forEach((element) {
+        channel.sink.add(element);
+      });
+    }
+
     channel.stream.listen((message) {
       // print(message);
       // channel.sink.close(status.goingAway);
@@ -58,21 +66,25 @@ class AppLogger {
 
   List<BlocRecord> blocs = [];
 
-  log(String payload) {
-    if (project == null) return;
-    this.channel.sink.add(jsonEncode({
+  log(String message) {
+    final payload = jsonEncode({
       'action': 'device_log',
       'payload': {
         'identifier': deviceInfo.identifier,
         'project': project,
         'sessionId': sessionId,
-        'log': payload,
+        'log': message,
       },
-    }));
+    });
+
+    if (project == null) {
+      messages.add(payload);
+    } else {
+      this.channel.sink.add(payload);
+    }
   }
 
   addBloc(String name, state) {
-    if (project == null) return;
     final bloc = BlocRecord(
       number: blocs.length,
       name: name,
@@ -82,19 +94,33 @@ class AppLogger {
       sessionId: sessionId,
     );
     this.blocs.add(bloc);
-    this.channel.sink.add(jsonEncode(DeviceRequestActionBlocOnCreated(
-          payload: blocs,
-          deviceInfo: deviceInfo,
-          project: project,
-          sessionId: sessionId,
-        ).toMap()));
+
+    final payload = jsonEncode(DeviceRequestActionBlocOnCreated(
+      payload: blocs,
+      deviceInfo: deviceInfo,
+      project: project,
+      sessionId: sessionId,
+    ).toMap());
+
+    if (project == null) {
+      messages.add(payload);
+   } else {
+      this.channel.sink.add(payload);
+    }
   }
 
   removeBloc(String name) {
     if (project == null) return;
     final index = this.blocs.indexWhere((element) => element.name == name);
     this.blocs.removeAt(index);
-    this.channel.sink.add(jsonEncode(DeviceRequestActionBlocOnClose(payload: blocs).toMap()));
+
+    final payload = jsonEncode(DeviceRequestActionBlocOnClose(payload: blocs).toMap());
+
+    if (project == null) {
+      messages.add(payload);
+    } else {
+      this.channel.sink.add(payload);
+    }
   }
 
   onChangeBloc(String name, state1, state2) {
@@ -112,7 +138,15 @@ class AppLogger {
         project: project,
         sessionId: sessionId,
       );
-      this.channel.sink.add(jsonEncode(change));
+
+      final payload = jsonEncode(jsonEncode(change));
+
+      if (project == null) {
+        messages.add(payload);
+      } else {
+        this.channel.sink.add(payload);
+      }
+
     } catch (e) {
       print(e);
     }
@@ -133,7 +167,14 @@ class AppLogger {
         project: project,
         sessionId: sessionId,
       );
-      this.channel.sink.add(jsonEncode(change));
+
+      final payload = jsonEncode(jsonEncode(change));
+
+      if (project == null) {
+        messages.add(payload);
+      } else {
+        this.channel.sink.add(payload);
+      }
     } catch (e) {
       print(e);
     }
