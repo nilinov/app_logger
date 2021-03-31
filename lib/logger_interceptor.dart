@@ -41,12 +41,7 @@ class LoggerInterceptor extends Interceptor {
       };
 
       final payload = jsonEncode(jsonData);
-      if (AppLogger().project == null) {
-        AppLogger().messages.add(payload);
-      } else {
-        AppLogger().channel.sink.add(payload);
-      }
-
+      AppLogger().messagesStream.sink.add(payload);
     } catch (e) {
       print(e);
     }
@@ -91,11 +86,7 @@ class LoggerInterceptor extends Interceptor {
       };
 
       final payload = jsonEncode(jsonData);
-      if (AppLogger().project == null) {
-        AppLogger().messages.add(payload);
-      } else {
-        AppLogger().channel.sink.add(payload);
-      }
+      AppLogger().messagesStream.sink.add(payload);
     } catch (e) {
       print(e);
     }
@@ -139,11 +130,7 @@ class LoggerInterceptor extends Interceptor {
         }
       };
       final payload = jsonEncode(jsonData);
-      if (AppLogger().project == null) {
-        AppLogger().messages.add(payload);
-      } else {
-        AppLogger().channel.sink.add(payload);
-      }
+      AppLogger().messagesStream.sink.add(payload);
     } catch (e) {
       print(e);
     }
