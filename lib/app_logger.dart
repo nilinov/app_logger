@@ -32,7 +32,7 @@ class AppLogger {
 
   List messages = [];
 
-  init(String loggerUrl, String project) async {
+  init(String loggerUrl, String project, {bool hasConnect = true}) async {
     this.loggerUrl = loggerUrl;
     this.project = project;
     deviceInfo = await getDeviceDetails();
@@ -44,24 +44,28 @@ class AppLogger {
       prefs.setInt('sessionId', sessionId);
     }
 
-    print('[Logger] init');
-    channel = IOWebSocketChannel.connect(loggerUrl);
+    if (hasConnect) {
+      print('[Logger] init');
+      channel = IOWebSocketChannel.connect(loggerUrl);
 
-    channel.sink.add(jsonEncode({
-      'action': 'device_connect',
-      'payload': deviceInfo,
-    }));
+      channel.sink.add(jsonEncode({
+        'action': 'device_connect',
+        'payload': deviceInfo,
+      }));
 
-    if (messages.isNotEmpty) {
-      messages.forEach((element) {
-        channel.sink.add(element);
+      if (messages.isNotEmpty) {
+        messages.forEach((element) {
+          channel.sink.add(element);
+        });
+      }
+
+      channel.stream.listen((message) {
+        // print(message);
+        // channel.sink.close(status.goingAway);
       });
+    } else {
+      print('[Logger] init, no connect remote');
     }
-
-    channel.stream.listen((message) {
-      // print(message);
-      // channel.sink.close(status.goingAway);
-    });
   }
 
   List<BlocRecord> blocs = [];
@@ -104,7 +108,7 @@ class AppLogger {
 
     if (project == null) {
       messages.add(payload);
-   } else {
+    } else {
       this.channel.sink.add(payload);
     }
   }
