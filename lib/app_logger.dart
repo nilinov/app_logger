@@ -59,6 +59,7 @@ class AppLogger {
   List<BlocRecord> blocs = [];
 
   log(String payload) {
+    if (project == null) return;
     this.channel.sink.add(jsonEncode({
       'action': 'device_log',
       'payload': {
@@ -71,6 +72,7 @@ class AppLogger {
   }
 
   addBloc(String name, state) {
+    if (project == null) return;
     final bloc = BlocRecord(
       number: blocs.length,
       name: name,
@@ -89,12 +91,14 @@ class AppLogger {
   }
 
   removeBloc(String name) {
+    if (project == null) return;
     final index = this.blocs.indexWhere((element) => element.name == name);
     this.blocs.removeAt(index);
     this.channel.sink.add(jsonEncode(DeviceRequestActionBlocOnClose(payload: blocs).toMap()));
   }
 
   onChangeBloc(String name, state1, state2) {
+    if (project == null) return;
     try {
       final change = DeviceRequestActionBlocOnChange(
         payload: BlocStateDiff(
@@ -115,6 +119,7 @@ class AppLogger {
   }
 
   onTransitionBloc(String name, state1, state2, String eventName) {
+    if (project == null) return;
     try {
       final change = DeviceRequestActionBlocOnTransition(
         payload: BlocStateDiff(

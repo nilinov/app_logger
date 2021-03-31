@@ -5,6 +5,8 @@ class LoggerInterceptor extends Interceptor {
 
   @override
   Future onRequest(RequestOptions options) async {
+    if (AppLogger().project == null) return;
+
     final createdAt = DateTime.now().toIso8601String();
 
     final curl = cURLRepresentation(options);
@@ -52,6 +54,7 @@ class LoggerInterceptor extends Interceptor {
 
   @override
   Future onResponse(Response response) {
+    if (AppLogger().project == null) return super.onResponse(response);
     try {
       final responseAt = DateTime.now().toIso8601String();
 
@@ -94,6 +97,7 @@ class LoggerInterceptor extends Interceptor {
 
   @override
   Future onError(DioError err) {
+    if (AppLogger().project == null) return super.onError(err);
     var response = err.response;
     try {
       final responseAt = DateTime.now().toIso8601String();
