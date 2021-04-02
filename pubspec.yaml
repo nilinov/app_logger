@@ -16,6 +16,7 @@ dependencies:
   dio: ^3.0.10
   device_info: ^1.0.0
   shared_preferences: ^0.5.12+4
+  http: ^0.12.2
 
 
 dev_dependencies:
