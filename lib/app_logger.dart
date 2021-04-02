@@ -1,4 +1,5 @@
 library app_logger;
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -32,10 +33,12 @@ class AppLogger {
   IOWebSocketChannel channel;
   String loggerUrl = '';
   String project;
+  StreamController messagesStream;
 
   List messages = [];
 
   init(String loggerUrl, String project, {bool hasConnect = true}) async {
+    messagesStream = new StreamController();
     this.loggerUrl = loggerUrl;
     this.project = project;
     deviceInfo = await getDeviceDetails();
@@ -69,6 +72,14 @@ class AppLogger {
     } else {
       print('[Logger] init, no connect remote');
     }
+
+    messagesStream.stream.listen((event) {
+      if (hasConnect) {
+        channel.sink.add(event);
+      } else {
+        messages.add(event);
+      }
+    });
   }
 
   List<BlocRecord> blocs = [];
@@ -84,11 +95,7 @@ class AppLogger {
       },
     });
 
-    if (project == null) {
-      messages.add(payload);
-    } else {
-      this.channel.sink.add(payload);
-    }
+    this.messagesStream.sink.add(payload);
   }
 
   addBloc(String name, state) {
@@ -109,11 +116,7 @@ class AppLogger {
       sessionId: sessionId,
     ).toMap());
 
-    if (project == null) {
-      messages.add(payload);
-    } else {
-      this.channel.sink.add(payload);
-    }
+    this.messagesStream.sink.add(payload);
   }
 
   removeBloc(String name) {
@@ -122,12 +125,7 @@ class AppLogger {
     this.blocs.removeAt(index);
 
     final payload = jsonEncode(DeviceRequestActionBlocOnClose(payload: blocs).toMap());
-
-    if (project == null) {
-      messages.add(payload);
-    } else {
-      this.channel.sink.add(payload);
-    }
+    this.messagesStream.sink.add(payload);
   }
 
   onChangeBloc(String name, state1, state2) {
@@ -147,12 +145,7 @@ class AppLogger {
       );
 
       final payload = jsonEncode(jsonEncode(change));
-
-      if (project == null) {
-        messages.add(payload);
-      } else {
-        this.channel.sink.add(payload);
-      }
+      this.messagesStream.sink.add(payload);
 
     } catch (e) {
       print(e);
@@ -176,14 +169,13 @@ class AppLogger {
       );
 
       final payload = jsonEncode(jsonEncode(change));
-
-      if (project == null) {
-        messages.add(payload);
-      } else {
-        this.channel.sink.add(payload);
-      }
+      this.messagesStream.sink.add(payload);
     } catch (e) {
       print(e);
     }
+  }
+
+  dispose() {
+    messagesStream?.close();
   }
 }
