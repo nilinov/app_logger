@@ -63,17 +63,17 @@ class LoggerHttp {
   }
 
   onResponse(Http.Response response, int number) {
-    if (response.body
-        .toString()
-        .length > 10000) {
-      print('Слишком большой запрос. Данные не будут показаны в логгере');
-      return;
-    }
+    // if (response.body
+    //     .toString()
+    //     .length > 10000) {
+    //   print('Слишком большой запрос. Данные не будут показаны в логгере');
+    //   return;
+    // }
 
     try {
       final responseAt = DateTime.now().toIso8601String();
 
-      final _extra = requests[number];
+      final _extra = requests[number - 1];
 
       Map jsonData = {
         'action': 'device_request',
