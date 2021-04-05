@@ -8,19 +8,18 @@ class LoggerHttp {
   LoggerHttp._internal();
 
   var countRequest = 0;
-  List extra = [];
+  List requests = [];
 
-  onRequest(Http.Request options) async {
+  onRequest(url, String method,
+      {Map<String, String> headers, Map<String, dynamic> params, Future<
+          Http.Response> request}) async {
     final createdAt = DateTime.now().toIso8601String();
 
-    final curl = cURLRepresentationHttp(options);
-
-    extra.add({
-      'hash': options.hashCode,
-      'number': countRequest.toString(),
+    requests.add({
+      'request': request,
+      'number': this.countRequest,
       'createdAt': createdAt,
-      'curl': curl,
-      'params': options.body,
+      'params': params,
     });
 
     try {
@@ -31,20 +30,20 @@ class LoggerHttp {
           'session_id': AppLogger().sessionId,
           'project': AppLogger().project,
           'number': countRequest,
-          'url': options.url.toString(),
+          'url': url,
           'code': null,
           "status": "pending",
-          "method": options.method,
-          'headers': options.headers,
+          "method": method,
+          'headers': headers,
           'headers_response': {},
-          'params': options.body,
+          'params': null,
           'response': null,
           'action': 'getElementById',
           'created_at': createdAt,
           'response_at': null,
           'size': null,
           'payload': null,
-          'curl': curl,
+          'curl': null,
         }
       };
 
@@ -59,15 +58,22 @@ class LoggerHttp {
     }
 
     this.countRequest++;
+
+    return this.countRequest;
   }
 
-  onResponse(Http.Response response) {
+  onResponse(Http.Response response, int number) {
+    if (response.body
+        .toString()
+        .length > 10000) {
+      print('Слишком большой запрос. Данные не будут показаны в логгере');
+      return;
+    }
+
     try {
       final responseAt = DateTime.now().toIso8601String();
 
-      final _extra = extra.firstWhere(
-          (element) => element['hash'] == response.request.hashCode,
-          orElse: () => null);
+      final _extra = requests[number];
 
       Map jsonData = {
         'action': 'device_request',
@@ -82,14 +88,16 @@ class LoggerHttp {
           "status": 'done',
           "status_code": response.statusCode,
           'headers': response.request.headers,
-          'headers_response': response.headers.map,
+          'headers_response': response.headers,
           'params': _extra['params'],
           'payload': response.body,
           'action': 'getElementById',
           'created_at': _extra['createdAt'],
           'response_at': responseAt,
           'curl': _extra['curl'],
-          'size': response.body.toString().length,
+          'size': response.body
+              .toString()
+              .length,
         }
       };
 
