@@ -10,13 +10,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  web_socket_channel: ^1.2.0
-  flutter_bloc: ^6.1.1
-  bloc: ^6.1.1
-  dio: ^3.0.10
-  device_info: ^1.0.0
-  shared_preferences: ^0.5.12+4
-  http: ^0.12.2
+  web_socket_channel: ^2.0.0
+  flutter_bloc: ^7.0.0
+  bloc: ^7.0.0
+  dio: ^4.0.0
+  device_info: ^2.0.0
+  shared_preferences: ^2.0.5
+  http: ^0.13.1
 
 
 dev_dependencies:

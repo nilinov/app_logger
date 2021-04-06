@@ -1,6 +1,6 @@
 part of app_logger;
 
-String cURLRepresentation(RequestOptions options) {
+String cURLRepresentationDio(RequestOptions options) {
   List<String> components = ["curl -i"];
   if (options.method != null && options.method.toUpperCase() == "GET") {
     components.add("-X ${options.method}");
