@@ -92,6 +92,8 @@ class LoggerInterceptor extends Interceptor {
     } catch (e) {
       print(e);
     }
+
+    return super.onResponse(response, handler);
   }
 
   @override
@@ -135,6 +137,8 @@ class LoggerInterceptor extends Interceptor {
     } catch (e) {
       print(e);
     }
+
+    return super.onError(err, handler);
   }
 }
 
