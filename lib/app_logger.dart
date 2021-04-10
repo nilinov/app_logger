@@ -1,4 +1,5 @@
 library app_logger;
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -8,15 +9,22 @@ import 'package:device_info/device_info.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as Http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/io.dart';
-import 'package:http/http.dart' as Http;
 
 part 'app_logger_bloc_observer.dart';
-part 'device_info.dart';
-part 'logger_interceptor.dart';
+part 'utils/curl.dart';
 part 'logger_http.dart';
-part 'curl.dart';
+part 'logger_interceptor.dart';
+part 'models/device_info.dart';
+part 'models/bloc/bloc_record.dart';
+part 'models/bloc/device_request_action_bloc_on_created.dart';
+part 'models/bloc/device_request_action_bloc_on_close.dart';
+part 'models/bloc/bloc_state_diff.dart';
+part 'models/bloc/device_request_action_bloc_on_change.dart';
+part 'models/bloc/device_request_action_bloc_on_transition.dart';
+part 'utils/get_device_details.dart';
 
 class AppLogger {
   static final AppLogger _singleton = AppLogger._internal();
@@ -41,7 +49,7 @@ class AppLogger {
     messagesStream = new StreamController();
     this.loggerUrl = loggerUrl;
     this.project = project;
-    deviceInfo = await getDeviceDetails();
+    deviceInfo = await getDeviceDetails(project: project, session: sessionId);
 
     if (sessionId == 0) {
       var prefs = await SharedPreferences.getInstance();
@@ -124,7 +132,8 @@ class AppLogger {
     final index = this.blocs.indexWhere((element) => element.name == name);
     this.blocs.removeAt(index);
 
-    final payload = jsonEncode(DeviceRequestActionBlocOnClose(payload: blocs).toMap());
+    final payload =
+        jsonEncode(DeviceRequestActionBlocOnClose(payload: blocs).toMap());
     this.messagesStream.sink.add(payload);
   }
 
@@ -146,7 +155,6 @@ class AppLogger {
 
       final payload = jsonEncode(jsonEncode(change));
       this.messagesStream.sink.add(payload);
-
     } catch (e) {
       print(e);
     }

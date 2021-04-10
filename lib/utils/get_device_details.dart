@@ -1,6 +1,9 @@
 part of app_logger;
 
-Future<DeviceInfo> getDeviceDetails() async {
+Future<DeviceInfo> getDeviceDetails({
+  @required String project,
+  @required int session,
+}) async {
   final DeviceInfoPlugin deviceInfoPlugin = new DeviceInfoPlugin();
   var res;
 
@@ -13,6 +16,8 @@ Future<DeviceInfo> getDeviceDetails() async {
         build.version.toString(),
         build.androidId, //UUID for Androi,
         build.product,
+        project,
+        session,
       );
     } else if (Platform.isIOS) {
       var data = await deviceInfoPlugin.iosInfo;
@@ -22,6 +27,8 @@ Future<DeviceInfo> getDeviceDetails() async {
         data.systemVersion,
         data.identifierForVendor, //UUID for iOS,
         data.systemName,
+        project,
+        session,
       );
     }
   } on PlatformException {
@@ -31,27 +38,3 @@ Future<DeviceInfo> getDeviceDetails() async {
   return res;
 }
 
-class DeviceInfo {
-  final String uuid;
-  final String deviceName;
-  final String deviceVersion;
-  final String identifier;
-  final String product;
-
-  DeviceInfo(this.uuid, this.deviceName, this.deviceVersion, this.identifier, this.product);
-
-  @override
-  String toString() {
-    return json.encode(toJson());
-  }
-
-  toJson() {
-    return {
-      'uuid': uuid,
-      'device_name': deviceName,
-      'device_version': deviceVersion,
-      'identifier': identifier,
-      'product': product,
-    };
-  }
-}
