@@ -31,6 +31,8 @@ class DeviceInfo {
       'device_version': deviceVersion,
       'identifier': identifier,
       'product': product,
+      'project': project,
+      'session': session,
     };
   }
 }

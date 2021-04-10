@@ -49,7 +49,6 @@ class AppLogger {
     messagesStream = new StreamController();
     this.loggerUrl = loggerUrl;
     this.project = project;
-    deviceInfo = await getDeviceDetails(project: project, session: sessionId);
 
     if (sessionId == 0) {
       var prefs = await SharedPreferences.getInstance();
@@ -57,6 +56,8 @@ class AppLogger {
       sessionId++;
       prefs.setInt('sessionId', sessionId);
     }
+
+    deviceInfo = await getDeviceDetails(project: project, session: sessionId);
 
     if (hasConnect) {
       print('[Logger] init');
