@@ -56,35 +56,31 @@ class LoggerInterceptor extends Interceptor {
       final responseAt = DateTime.now().toIso8601String();
 
       final options = response.requestOptions;
-      
+
       var number = int.parse(options?.extra['number'] ?? '0');
       var createdAt = options?.extra['createdAt'] ?? '';
       var curl = options?.extra['curl'] ?? '';
 
       Map jsonData = {
         'action': 'device_request',
-        'payload': {
-          'device_identifier': AppLogger().deviceInfo.identifier,
-          'session_id': AppLogger().sessionId,
-          'project': AppLogger().project,
-          'number': number,
-          'url': options.uri.toString(),
-          'code': response.statusCode,
-          'method': options.method,
-          "status": 'done',
-          "status_code": response.statusCode,
-          'headers': options.headers,
-          'headers_response': response.headers.map,
-          'params': options.data,
-          'payload': response.data,
-          'action': 'getElementById',
-          'created_at': createdAt,
-          'response_at': responseAt,
-          'curl': curl,
-          'size': response.data
-              .toString()
-              .length,
-        }
+        'payload': RequestPayload(
+          number: number,
+          url: options.uri.toString(),
+          code: response.statusCode,
+          method: options.method,
+          status: 'done',
+          statusCode: response.statusCode,
+          headers: options.headers,
+          headersResponse: response.headers.map,
+          params: options.data,
+          payload: response.data,
+          action: 'getElementById',
+          createdAt: createdAt,
+          responseAt: responseAt,
+          curl: curl,
+          size: response.data.toString().length,
+          baseUrl: AppLogger().baseUrl,
+        ),
       };
 
       final payload = jsonEncode(jsonData);
@@ -109,28 +105,24 @@ class LoggerInterceptor extends Interceptor {
 
       Map jsonData = {
         'action': 'device_request',
-        'payload': {
-          'device_identifier': AppLogger().deviceInfo.identifier,
-          'session_id': AppLogger().sessionId,
-          'project': AppLogger().project,
-          'number': number,
-          'url': options.uri.toString(),
-          'code': response.statusCode,
-          'method': options.method,
-          "status": 'error',
-          "status_code": response.statusCode,
-          'headers': options.headers,
-          'headers response': response.headers.map,
-          'params': options.data,
-          'payload': response.data,
-          'action': 'getElementById',
-          'created_at': createdAt,
-          'response_at': responseAt,
-          'curl': curl,
-          'size': response.data
-              .toString()
-              .length,
-        }
+        'payload': RequestPayload(
+          number: number,
+          url: options.uri.toString(),
+          code: response.statusCode,
+          method: options.method,
+          status: 'error',
+          statusCode: response.statusCode,
+          headers: options.headers,
+          headersResponse: response.headers.map,
+          params: options.data,
+          payload: response.data,
+          action: 'getElementById',
+          createdAt: createdAt,
+          responseAt: responseAt,
+          curl: curl,
+          size: response.data.toString().length,
+          baseUrl: AppLogger().baseUrl,
+        )
       };
       final payload = jsonEncode(jsonData);
       AppLogger().messagesStream.sink.add(payload);
@@ -141,4 +133,3 @@ class LoggerInterceptor extends Interceptor {
     return super.onError(err, handler);
   }
 }
-

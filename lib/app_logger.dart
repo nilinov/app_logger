@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:app_logger/models/request_payload.dart';
 import 'package:bloc/bloc.dart';
 import 'package:device_info/device_info.dart';
 import 'package:dio/dio.dart';
