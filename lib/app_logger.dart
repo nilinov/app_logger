@@ -62,6 +62,7 @@ class AppLogger {
     messagesStream = new StreamController();
     this.loggerUrl = loggerUrl;
     this.project = project;
+    this.baseUrl = baseUrl;
 
     if (sessionId == 0) {
       var prefs = await SharedPreferences.getInstance();
