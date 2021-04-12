@@ -1,6 +1,7 @@
 part of app_logger;
 
 Future<DeviceInfo> getDeviceDetails({
+  @required String baseUrl,
   @required String project,
   @required int session,
 }) async {
@@ -18,6 +19,7 @@ Future<DeviceInfo> getDeviceDetails({
         build.product,
         project,
         session,
+        baseUrl,
       );
     } else if (Platform.isIOS) {
       var data = await deviceInfoPlugin.iosInfo;
@@ -29,6 +31,7 @@ Future<DeviceInfo> getDeviceDetails({
         data.systemName,
         project,
         session,
+        baseUrl,
       );
     }
   } on PlatformException {

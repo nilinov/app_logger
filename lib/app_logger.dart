@@ -14,16 +14,27 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/io.dart';
 
 part 'app_logger_bloc_observer.dart';
+
 part 'utils/curl.dart';
+
 part 'logger_http.dart';
+
 part 'logger_interceptor.dart';
+
 part 'models/device_info.dart';
+
 part 'models/bloc/bloc_record.dart';
+
 part 'models/bloc/device_request_action_bloc_on_created.dart';
+
 part 'models/bloc/device_request_action_bloc_on_close.dart';
+
 part 'models/bloc/bloc_state_diff.dart';
+
 part 'models/bloc/device_request_action_bloc_on_change.dart';
+
 part 'models/bloc/device_request_action_bloc_on_transition.dart';
+
 part 'utils/get_device_details.dart';
 
 class AppLogger {
@@ -40,12 +51,13 @@ class AppLogger {
   int sessionId = 0;
   IOWebSocketChannel channel;
   String loggerUrl = '';
+  String baseUrl = '';
   String project;
   StreamController messagesStream;
 
   List messages = [];
 
-  init(String loggerUrl, String project, {bool hasConnect = true}) async {
+  init(String loggerUrl, String project, {bool hasConnect = true, String baseUrl}) async {
     messagesStream = new StreamController();
     this.loggerUrl = loggerUrl;
     this.project = project;
@@ -57,7 +69,11 @@ class AppLogger {
       prefs.setInt('sessionId', sessionId);
     }
 
-    deviceInfo = await getDeviceDetails(project: project, session: sessionId);
+    deviceInfo = await getDeviceDetails(
+      project: project,
+      session: sessionId,
+      baseUrl: baseUrl,
+    );
 
     if (hasConnect) {
       print('[Logger] init');
@@ -133,8 +149,7 @@ class AppLogger {
     final index = this.blocs.indexWhere((element) => element.name == name);
     this.blocs.removeAt(index);
 
-    final payload =
-        jsonEncode(DeviceRequestActionBlocOnClose(payload: blocs).toMap());
+    final payload = jsonEncode(DeviceRequestActionBlocOnClose(payload: blocs).toMap());
     this.messagesStream.sink.add(payload);
   }
 

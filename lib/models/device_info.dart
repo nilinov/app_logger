@@ -8,16 +8,18 @@ class DeviceInfo {
   final String product;
   final String project;
   final int session;
+  final String baseUrl;
 
   DeviceInfo(
-      this.uuid,
-      this.deviceName,
-      this.deviceVersion,
-      this.identifier,
-      this.product,
-      this.project,
-      this.session,
-      );
+    this.uuid,
+    this.deviceName,
+    this.deviceVersion,
+    this.identifier,
+    this.product,
+    this.project,
+    this.session,
+    this.baseUrl,
+  );
 
   @override
   String toString() {
@@ -33,6 +35,7 @@ class DeviceInfo {
       'product': product,
       'project': project,
       'session': session,
+      'baseUrl': baseUrl,
     };
   }
 }
