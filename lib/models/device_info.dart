@@ -1,14 +1,14 @@
 part of app_logger;
 
 class DeviceInfo {
-  final String uuid;
-  final String deviceName;
-  final String deviceVersion;
-  final String identifier;
-  final String product;
-  final String project;
-  final int session;
-  final String baseUrl;
+  String uuid;
+  String deviceName;
+  String deviceVersion;
+  String identifier;
+  String product;
+  String project;
+  int session;
+  String baseUrl;
 
   DeviceInfo(
     this.uuid,
@@ -24,6 +24,26 @@ class DeviceInfo {
   @override
   String toString() {
     return json.encode(toJson());
+  }
+
+  update({
+    String uuid,
+    String deviceName,
+    String deviceVersion,
+    String identifier,
+    String product,
+    String project,
+    int session,
+    String baseUrl,
+  }) {
+    this.baseUrl = uuid ?? this.baseUrl;
+    this.baseUrl = deviceName ?? this.baseUrl;
+    this.baseUrl = deviceVersion ?? this.baseUrl;
+    this.baseUrl = identifier ?? this.baseUrl;
+    this.baseUrl = product ?? this.baseUrl;
+    this.baseUrl = project ?? this.baseUrl;
+    this.baseUrl = session ?? this.baseUrl;
+    this.baseUrl = baseUrl ?? this.baseUrl;
   }
 
   toJson() {

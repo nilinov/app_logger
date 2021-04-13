@@ -64,7 +64,15 @@ class AppLogger {
 
   create() {
     if (!isCreated) {
-      messagesStream.stream.listen((event) {
+      messagesStream.stream.listen((event) async {
+        if (deviceInfo == null) {
+          deviceInfo = await getDeviceDetails(
+            project: project,
+            session: sessionId,
+            baseUrl: baseUrl,
+          );
+        }
+
         if (hasConnect) {
           channel.sink.add(event);
         } else {
@@ -89,11 +97,19 @@ class AppLogger {
       prefs.setInt('sessionId', sessionId);
     }
 
-    deviceInfo = await getDeviceDetails(
-      project: project,
-      session: sessionId,
-      baseUrl: baseUrl,
-    );
+    if (deviceInfo == null) {
+      deviceInfo = await getDeviceDetails(
+        project: project,
+        session: sessionId,
+        baseUrl: baseUrl,
+      );
+    } else {
+      deviceInfo = deviceInfo.update(
+        project: project,
+        session: sessionId,
+        baseUrl: baseUrl,
+      );
+    }
 
     if (hasConnect) {
       print('[Logger] init');
@@ -151,13 +167,15 @@ class AppLogger {
     );
     this.blocs.add(bloc);
 
+    final blocJson = DeviceRequestActionBlocOnCreated(
+      payload: blocs,
+      deviceInfo: deviceInfo,
+      project: project,
+      sessionId: sessionId,
+    ).toMap();
+
     try {
-      final payload = jsonEncode(DeviceRequestActionBlocOnCreated(
-        payload: blocs,
-        deviceInfo: deviceInfo,
-        project: project,
-        sessionId: sessionId,
-      ).toMap());
+      final payload = jsonEncode(blocJson);
 
       this.messagesStream.sink.add(payload);
     } catch (err) {
