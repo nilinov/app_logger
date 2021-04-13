@@ -15,11 +15,23 @@ class DeviceRequestActionBlocOnCreated {
     @required this.sessionId,
   });
 
-  Map<String, dynamic> toMap() => {
-    "action": action,
-    "payload": payload,
-    "deviceInfo": deviceInfo,
-    "project": project,
-    "sessionId": sessionId,
-  };
+  Map<String, dynamic> toMap() {
+    try {
+      return {
+        "action": action,
+        "payload": payload,
+        "deviceInfo": deviceInfo,
+        "project": project,
+        "sessionId": sessionId,
+      };
+    } catch (err) {
+      return {
+        "action": null,
+        "payload": null,
+        "deviceInfo": deviceInfo,
+        "project": project,
+        "sessionId": sessionId,
+      };
+    }
+  }
 }

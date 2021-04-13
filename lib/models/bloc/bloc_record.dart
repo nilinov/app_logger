@@ -17,14 +17,27 @@ class BlocRecord {
     @required this.sessionId,
   });
 
-  Map<String, dynamic> toJson() => {
-    "number": number,
-    "name": name,
-    "state": state,
-    "deviceInfo": deviceInfo,
-    "project": project,
-    "sessionId": sessionId,
-  };
+  Map<String, dynamic> toJson() {
+    try {
+      return {
+        "number": number,
+        "name": name,
+        "state": state,
+        "deviceInfo": deviceInfo,
+        "project": project,
+        "sessionId": sessionId,
+      };
+    } catch(err) {
+      return {
+        "number": number,
+        "name": name,
+        "deviceInfo": deviceInfo,
+        "project": project,
+        "sessionId": sessionId,
+        "state": {},
+      };
+    }
+  }
 
   String toString() =>
       "BlocRecord[number=$number,name=$name,state=$state, deviceInfo: $deviceInfo, project: $project, sessionId: $sessionId]";

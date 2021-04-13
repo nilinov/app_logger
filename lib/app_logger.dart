@@ -42,6 +42,8 @@ class AppLogger {
   static final AppLogger _singleton = AppLogger._internal();
   String path;
 
+  bool isCreated = false;
+
   factory AppLogger() {
     return _singleton;
   }
@@ -54,13 +56,27 @@ class AppLogger {
   String loggerUrl = '';
   String baseUrl = '';
   String project;
-  StreamController messagesStream;
+  StreamController messagesStream = new StreamController();
   bool hideErrorBlocSerialize = true;
+  bool hasConnect = false;
 
   List messages = [];
 
+  create() {
+    if (!isCreated) {
+      messagesStream.stream.listen((event) {
+        if (hasConnect) {
+          channel.sink.add(event);
+        } else {
+          messages.add(event);
+        }
+      });
+      isCreated = true;
+    }
+  }
+
   init(String loggerUrl, String project, {bool hasConnect = true, String baseUrl, bool hideErrorBlocSerialize}) async {
-    messagesStream = new StreamController();
+    create();
     this.loggerUrl = loggerUrl;
     this.project = project;
     this.baseUrl = baseUrl;
@@ -82,8 +98,9 @@ class AppLogger {
     if (hasConnect) {
       print('[Logger] init');
       channel = IOWebSocketChannel.connect(loggerUrl);
+      this.hasConnect = true;
 
-      channel.sink.add(jsonEncode({
+      messages.add(jsonEncode({
         'action': 'device_connect',
         'payload': deviceInfo,
       }));
@@ -101,19 +118,13 @@ class AppLogger {
     } else {
       print('[Logger] init, no connect remote');
     }
-
-    messagesStream.stream.listen((event) {
-      if (hasConnect) {
-        channel.sink.add(event);
-      } else {
-        messages.add(event);
-      }
-    });
   }
 
   List<BlocRecord> blocs = [];
 
   log(String message) {
+    create();
+
     final payload = jsonEncode({
       'action': 'device_log',
       'payload': {
@@ -128,6 +139,8 @@ class AppLogger {
   }
 
   addBloc(String name, state) {
+    create();
+
     final bloc = BlocRecord(
       number: blocs.length,
       name: name,
@@ -138,17 +151,25 @@ class AppLogger {
     );
     this.blocs.add(bloc);
 
-    final payload = jsonEncode(DeviceRequestActionBlocOnCreated(
-      payload: blocs,
-      deviceInfo: deviceInfo,
-      project: project,
-      sessionId: sessionId,
-    ).toMap());
+    try {
+      final payload = jsonEncode(DeviceRequestActionBlocOnCreated(
+        payload: blocs,
+        deviceInfo: deviceInfo,
+        project: project,
+        sessionId: sessionId,
+      ).toMap());
 
-    this.messagesStream.sink.add(payload);
+      this.messagesStream.sink.add(payload);
+    } catch (err) {
+      if (!AppLogger().hideErrorBlocSerialize) {
+        debugPrint(err);
+      }
+    }
   }
 
   removeBloc(String name) {
+    create();
+
     if (project == null) return;
     final index = this.blocs.indexWhere((element) => element.name == name);
     this.blocs.removeAt(index);
@@ -158,22 +179,24 @@ class AppLogger {
   }
 
   onChangeBloc(String name, state1, state2) {
-    if (project == null) return;
-    try {
-      final change = DeviceRequestActionBlocOnChange(
-        payload: BlocStateDiff(
-          bloc: name,
-          currentState: state1,
-          nextState: state2,
-          eventName: null,
-          isBloc: false,
-        ),
-        deviceInfo: deviceInfo,
-        project: project,
-        sessionId: sessionId,
-      );
+    create();
 
-      final payload = jsonEncode(jsonEncode(change));
+    if (project == null) return;
+    final change = DeviceRequestActionBlocOnChange(
+      payload: BlocStateDiff(
+        bloc: name,
+        currentState: state1,
+        nextState: state2,
+        eventName: null,
+        isBloc: false,
+      ),
+      deviceInfo: deviceInfo,
+      project: project,
+      sessionId: sessionId,
+    );
+
+    try {
+      final payload = jsonEncode(change);
       this.messagesStream.sink.add(payload);
     } catch (e) {
       if (!AppLogger().hideErrorBlocSerialize) {
@@ -183,6 +206,8 @@ class AppLogger {
   }
 
   onTransitionBloc(String name, state1, state2, String eventName) {
+    create();
+
     if (project == null) return;
     try {
       final change = DeviceRequestActionBlocOnTransition(
@@ -198,7 +223,7 @@ class AppLogger {
         sessionId: sessionId,
       );
 
-      final payload = jsonEncode(jsonEncode(change));
+      final payload = jsonEncode(change);
       this.messagesStream.sink.add(payload);
     } catch (e) {
       if (!AppLogger().hideErrorBlocSerialize) {
@@ -208,6 +233,8 @@ class AppLogger {
   }
 
   dispose() {
+    create();
+
     messagesStream?.close();
   }
 }
