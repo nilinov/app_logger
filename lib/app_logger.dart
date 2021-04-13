@@ -144,7 +144,7 @@ class AppLogger {
     final payload = jsonEncode({
       'action': 'device_log',
       'payload': {
-        'identifier': deviceInfo.identifier,
+        'identifier': deviceInfo?.identifier,
         'project': project,
         'sessionId': sessionId,
         'log': message,

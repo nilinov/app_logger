@@ -19,7 +19,7 @@ class LoggerInterceptor extends Interceptor {
       Map jsonData = {
         'action': 'device_request',
         'payload': {
-          'device_identifier': AppLogger().deviceInfo.identifier,
+          'device_identifier': AppLogger().deviceInfo?.identifier,
           'session_id': AppLogger().sessionId,
           'project': AppLogger().project,
           'number': countRequest,

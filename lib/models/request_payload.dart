@@ -39,7 +39,7 @@ class RequestPayload {
   });
 
   toJson() => {
-        'device_identifier': AppLogger().deviceInfo.identifier,
+        'device_identifier': AppLogger().deviceInfo?.identifier,
         'session_id': AppLogger().sessionId,
         'project': AppLogger().project,
         'number': number,
