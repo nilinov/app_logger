@@ -55,14 +55,16 @@ class AppLogger {
   String baseUrl = '';
   String project;
   StreamController messagesStream;
+  bool hideErrorBlocSerialize = true;
 
   List messages = [];
 
-  init(String loggerUrl, String project, {bool hasConnect = true, String baseUrl}) async {
+  init(String loggerUrl, String project, {bool hasConnect = true, String baseUrl, bool hideErrorBlocSerialize}) async {
     messagesStream = new StreamController();
     this.loggerUrl = loggerUrl;
     this.project = project;
     this.baseUrl = baseUrl;
+    this.hideErrorBlocSerialize = hideErrorBlocSerialize ?? this.hideErrorBlocSerialize;
 
     if (sessionId == 0) {
       var prefs = await SharedPreferences.getInstance();
@@ -174,7 +176,9 @@ class AppLogger {
       final payload = jsonEncode(jsonEncode(change));
       this.messagesStream.sink.add(payload);
     } catch (e) {
-      print(e);
+      if (!AppLogger().hideErrorBlocSerialize) {
+        print(e);
+      }
     }
   }
 
@@ -197,7 +201,9 @@ class AppLogger {
       final payload = jsonEncode(jsonEncode(change));
       this.messagesStream.sink.add(payload);
     } catch (e) {
-      print(e);
+      if (!AppLogger().hideErrorBlocSerialize) {
+        print(e);
+      }
     }
   }
 
