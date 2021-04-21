@@ -9,6 +9,7 @@ class DeviceInfo {
   String project;
   int session;
   String baseUrl;
+  String install;
 
   DeviceInfo(
     this.uuid,
@@ -19,6 +20,7 @@ class DeviceInfo {
     this.project,
     this.session,
     this.baseUrl,
+    this.install,
   );
 
   @override
@@ -36,14 +38,15 @@ class DeviceInfo {
     int session,
     String baseUrl,
   }) {
-    this.baseUrl = uuid ?? this.baseUrl;
-    this.baseUrl = deviceName ?? this.baseUrl;
-    this.baseUrl = deviceVersion ?? this.baseUrl;
-    this.baseUrl = identifier ?? this.baseUrl;
-    this.baseUrl = product ?? this.baseUrl;
-    this.baseUrl = project ?? this.baseUrl;
-    this.baseUrl = session ?? this.baseUrl;
+    this.uuid = uuid ?? this.baseUrl;
+    this.deviceName = deviceName ?? this.baseUrl;
+    this.deviceVersion = deviceVersion ?? this.baseUrl;
+    this.identifier = identifier ?? this.baseUrl;
+    this.product = product ?? this.baseUrl;
+    this.project = project ?? this.baseUrl;
+    this.session = session ?? this.baseUrl;
     this.baseUrl = baseUrl ?? this.baseUrl;
+    this.install = install ?? this.install;
   }
 
   toJson() {
@@ -56,6 +59,7 @@ class DeviceInfo {
       'project': project,
       'session': session,
       'baseUrl': baseUrl,
+      'install': install,
     };
   }
 }
