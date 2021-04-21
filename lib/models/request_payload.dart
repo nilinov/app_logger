@@ -18,6 +18,7 @@ class RequestPayload {
   final curl;
   final size;
   final String baseUrl;
+  final String install;
 
   RequestPayload({
     @required this.number,
@@ -36,6 +37,7 @@ class RequestPayload {
     @required this.curl,
     @required this.size,
     @required this.baseUrl,
+    @required this.install,
   });
 
   toJson() => {
@@ -58,5 +60,6 @@ class RequestPayload {
         'curl': curl,
         'size': size,
         'baseUrl': baseUrl,
+        'install': install,
       };
 }

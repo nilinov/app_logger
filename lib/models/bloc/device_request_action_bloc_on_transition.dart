@@ -5,6 +5,7 @@ class DeviceRequestActionBlocOnTransition {
   final BlocStateDiff payload;
   final DeviceInfo deviceInfo;
   final String project;
+  final String install;
   final int sessionId;
 
   DeviceRequestActionBlocOnTransition({
@@ -13,6 +14,7 @@ class DeviceRequestActionBlocOnTransition {
     @required this.deviceInfo,
     @required this.project,
     @required this.sessionId,
+    @required this.install,
   });
 
   Map<String, dynamic> toJson() => {
@@ -21,5 +23,6 @@ class DeviceRequestActionBlocOnTransition {
     "deviceInfo": deviceInfo,
     "project": project,
     "sessionId": sessionId,
+    "install": install,
   };
 }

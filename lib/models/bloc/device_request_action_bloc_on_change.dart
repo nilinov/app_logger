@@ -5,6 +5,7 @@ class DeviceRequestActionBlocOnChange {
   final BlocStateDiff payload;
   final DeviceInfo deviceInfo;
   final String project;
+  final String install;
   final int sessionId;
 
   DeviceRequestActionBlocOnChange({
@@ -13,6 +14,7 @@ class DeviceRequestActionBlocOnChange {
     @required this.deviceInfo,
     @required this.project,
     @required this.sessionId,
+    @required this.install,
   });
 
   Map<String, dynamic> toJson() => {
@@ -21,5 +23,6 @@ class DeviceRequestActionBlocOnChange {
     "deviceInfo": deviceInfo,
     "project": project,
     "sessionId": sessionId,
+    "install": install,
   };
 }

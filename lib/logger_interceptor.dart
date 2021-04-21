@@ -37,6 +37,7 @@ class LoggerInterceptor extends Interceptor {
           'size': null,
           'payload': null,
           'curl': curl,
+          'install': AppLogger().install,
         }
       };
 
@@ -80,6 +81,7 @@ class LoggerInterceptor extends Interceptor {
           curl: curl,
           size: response.data.toString().length,
           baseUrl: AppLogger().baseUrl,
+          install: AppLogger().install,
         ),
       };
 
