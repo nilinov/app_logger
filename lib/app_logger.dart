@@ -72,6 +72,7 @@ class AppLogger {
             project: project,
             session: sessionId,
             baseUrl: baseUrl,
+            install: install,
           );
         }
 
