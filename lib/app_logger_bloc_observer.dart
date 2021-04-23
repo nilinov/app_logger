@@ -2,10 +2,10 @@ part of app_logger;
 
 class AppLoggerBlocObserver extends BlocObserver {
   @override
-  void onCreate(BlocBase bloc) {
-    super.onCreate(bloc);
+  void onCreate(Cubit cubit) {
+    super.onCreate(cubit);
     // print('onCreate -- cubit: ${cubit.runtimeType}');
-    AppLogger().addBloc(bloc.runtimeType.toString(), bloc.state);
+    AppLogger().addBloc(cubit.runtimeType.toString(), cubit.state);
   }
 
   @override
@@ -15,11 +15,11 @@ class AppLoggerBlocObserver extends BlocObserver {
   }
 
   @override
-  void onChange(BlocBase bloc, Change change) {
-    super.onChange(bloc, change);
+  void onChange(Cubit cubit, Change change) {
+    super.onChange(cubit, change);
     // print('onChange -- cubit: ${cubit.runtimeType}, change: $change');
-    if (bloc.runtimeType.toString().contains('Cubit')) {
-      AppLogger().onChangeBloc(bloc.runtimeType.toString(), change.currentState, change.nextState);
+    if (cubit.runtimeType.toString().contains('Cubit')) {
+      AppLogger().onChangeBloc(cubit.runtimeType.toString(), change.currentState, change.nextState);
     }
   }
 
@@ -36,8 +36,8 @@ class AppLoggerBlocObserver extends BlocObserver {
   }
 
   @override
-  void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
-    print('onError -- cubit: ${bloc.runtimeType}, error: $error');
+  void onError(Cubit cubit, Object error, StackTrace stackTrace) {
+    print('onError -- cubit: ${cubit.runtimeType}, error: $error');
     // AppLogger().onChangeBloc(cubit.runtimeType.toString(), change.currentState, change.nextState);
     // AppLogger().onTransitionBloc(
     //   bloc.runtimeType.toString(),
@@ -45,13 +45,13 @@ class AppLoggerBlocObserver extends BlocObserver {
     //   transition.nextState,
     //   transition.event.runtimeType.toString(),
     // );
-    super.onError(bloc, error, stackTrace);
+    super.onError(cubit, error, stackTrace);
   }
 
   @override
-  void onClose(BlocBase bloc) {
-    super.onClose(bloc);
-    print('onClose -- cubit: ${bloc.runtimeType}');
-    AppLogger().removeBloc(bloc.runtimeType.toString());
+  void onClose(Cubit cubit) {
+    super.onClose(cubit);
+    print('onClose -- cubit: ${cubit.runtimeType}');
+    AppLogger().removeBloc(cubit.runtimeType.toString());
   }
 }

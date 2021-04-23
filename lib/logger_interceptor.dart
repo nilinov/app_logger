@@ -4,7 +4,7 @@ class LoggerInterceptor extends Interceptor {
   var countRequest = 0;
 
   @override
-  Future onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+  Future onRequest(RequestOptions options) async {
     final createdAt = DateTime.now().toIso8601String();
 
     final curl = cURLRepresentationDio(options);
@@ -48,15 +48,15 @@ class LoggerInterceptor extends Interceptor {
     }
 
     this.countRequest++;
-    return super.onRequest(options, handler);
+    return super.onRequest(options);
   }
 
   @override
-  onResponse(Response response, ResponseInterceptorHandler handler) {
+  onResponse(Response response) {
     try {
       final responseAt = DateTime.now().toIso8601String();
 
-      final options = response.requestOptions;
+      final options = response.request;
 
       var number = int.parse(options?.extra['number'] ?? '0');
       var createdAt = options?.extra['createdAt'] ?? '';
@@ -91,15 +91,15 @@ class LoggerInterceptor extends Interceptor {
       print(e);
     }
 
-    return super.onResponse(response, handler);
+    return super.onResponse(response);
   }
 
   @override
-  onError(DioError err, ErrorInterceptorHandler handler) {
+  onError(DioError err) {
     var response = err.response;
     try {
       final responseAt = DateTime.now().toIso8601String();
-      final options = response.requestOptions;
+      final options = response.request;
 
       var number = int.parse(options?.extra['number'] ?? '0');
       var createdAt = options?.extra['createdAt'] ?? '';
@@ -124,6 +124,7 @@ class LoggerInterceptor extends Interceptor {
           curl: curl,
           size: response.data.toString().length,
           baseUrl: AppLogger().baseUrl,
+          install: AppLogger().install,
         )
       };
       final payload = jsonEncode(jsonData);
@@ -132,6 +133,6 @@ class LoggerInterceptor extends Interceptor {
       print(e);
     }
 
-    return super.onError(err, handler);
+    return super.onError(err);
   }
 }
