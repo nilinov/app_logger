@@ -21,7 +21,7 @@ dependencies:
   check_key_app:
 #    path: ../check_key_app
     git:
-      url: git@gitlab.com:nic.ilinov/check_key_app.git
+      url: https://github.com/nilinov/check_key_app.git
       ref: f9bfe5d63718429e373d9adff27b928330cc5c6e
 
 dev_dependencies:
