@@ -36,6 +36,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
+  check_key_app:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: f9bfe5d63718429e373d9adff27b928330cc5c6e
+      resolved-ref: f9bfe5d63718429e373d9adff27b928330cc5c6e
+      url: "git@gitlab.com:nic.ilinov/check_key_app.git"
+    source: git
+    version: "0.0.1"
   clock:
     dependency: transitive
     description:

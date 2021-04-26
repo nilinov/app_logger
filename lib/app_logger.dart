@@ -12,6 +12,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as Http;
+import 'package:check_key_app/check_key_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/io.dart';
 
@@ -86,7 +87,7 @@ class AppLogger {
     }
   }
 
-  init(String loggerUrl, String project, {bool hasConnect = true, String baseUrl, bool hideErrorBlocSerialize}) async {
+  init(String loggerUrl, String project, {bool hasConnect, String baseUrl, bool hideErrorBlocSerialize}) async {
     create();
     this.loggerUrl = loggerUrl;
     this.project = project;
@@ -116,7 +117,7 @@ class AppLogger {
       );
     }
 
-    if (hasConnect) {
+    if (hasConnect == true || (hasConnect == null && (await CheckKeyApp.isAppInstalled == true))) {
       print('[Logger] init');
       channel = IOWebSocketChannel.connect(loggerUrl);
       this.hasConnect = true;
@@ -177,6 +178,7 @@ class AppLogger {
       deviceInfo: deviceInfo,
       project: project,
       sessionId: sessionId,
+      install: AppLogger().install,
     ).toMap();
 
     try {
@@ -216,6 +218,7 @@ class AppLogger {
       deviceInfo: deviceInfo,
       project: project,
       sessionId: sessionId,
+      install: AppLogger().install,
     );
 
     try {
@@ -244,6 +247,7 @@ class AppLogger {
         deviceInfo: deviceInfo,
         project: project,
         sessionId: sessionId,
+        install: AppLogger().install,
       );
 
       final payload = jsonEncode(change);
