@@ -7,37 +7,26 @@ import 'dart:io';
 import 'package:app_logger/models/request_payload.dart';
 import 'package:app_logger/utils/generate_random_string.dart';
 import 'package:bloc/bloc.dart';
+import 'package:check_key_app/check_key_app.dart';
 import 'package:device_info/device_info.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as Http;
-import 'package:check_key_app/check_key_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/io.dart';
 
 part 'app_logger_bloc_observer.dart';
-
-part 'utils/curl.dart';
-
 part 'logger_http.dart';
-
 part 'logger_interceptor.dart';
-
-part 'models/device_info.dart';
-
 part 'models/bloc/bloc_record.dart';
-
-part 'models/bloc/device_request_action_bloc_on_created.dart';
-
-part 'models/bloc/device_request_action_bloc_on_close.dart';
-
 part 'models/bloc/bloc_state_diff.dart';
-
 part 'models/bloc/device_request_action_bloc_on_change.dart';
-
+part 'models/bloc/device_request_action_bloc_on_close.dart';
+part 'models/bloc/device_request_action_bloc_on_created.dart';
 part 'models/bloc/device_request_action_bloc_on_transition.dart';
-
+part 'models/device_info.dart';
+part 'utils/curl.dart';
 part 'utils/get_device_details.dart';
 
 class AppLogger {
@@ -117,7 +106,14 @@ class AppLogger {
       );
     }
 
-    if (hasConnect == true || (hasConnect == null && (await CheckKeyApp.isAppInstalled == true))) {
+    final isEmulator = Platform.isAndroid
+        ? (await DeviceInfoPlugin().androidInfo).isPhysicalDevice == false
+        : (await DeviceInfoPlugin().iosInfo).isPhysicalDevice == false;
+
+    final bool canConnect =
+        hasConnect == true || (hasConnect == null && (await CheckKeyApp.isAppInstalled == true)) || isEmulator;
+
+    if (canConnect) {
       print('[Logger] init');
       channel = IOWebSocketChannel.connect(loggerUrl);
       this.hasConnect = true;
