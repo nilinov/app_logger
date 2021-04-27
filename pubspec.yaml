@@ -19,10 +19,10 @@ dependencies:
   http: ^0.13.1
 
   check_key_app:
-#    path: ../check_key_app
+  #  path: ../check_key_app
     git:
       url: git@gitlab.com:nic.ilinov/check_key_app.git
-      ref: a5dafb0546625383b999c853b143147502e87843
+      ref: c3b3d63106d1b71036ad593ab70b36941924b85e
 
 dev_dependencies:
   flutter_test:
