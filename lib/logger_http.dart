@@ -55,7 +55,7 @@ class LoggerHttp {
       if (AppLogger().project == null) {
         AppLogger().messages.add(payload);
       } else {
-        AppLogger().socket.emit('msg', payload);
+        AppLogger().channel.sink.add(payload);
       }
     } catch (e) {
       print(e);
@@ -109,7 +109,7 @@ class LoggerHttp {
       if (AppLogger().project == null) {
         AppLogger().messages.add(payload);
       } else {
-        AppLogger().socket.emit('msg', payload);
+        AppLogger().channel.sink.add(payload);
       }
     } catch (e) {
       print(e);

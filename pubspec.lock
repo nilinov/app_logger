@@ -39,11 +39,9 @@ packages:
   check_key_app:
     dependency: "direct main"
     description:
-      path: "."
-      ref: c3b3d63106d1b71036ad593ab70b36941924b85e
-      resolved-ref: c3b3d63106d1b71036ad593ab70b36941924b85e
-      url: "https://gitlab.com/nic.ilinov/check_key_app.git"
-    source: git
+      path: "../check_key_app"
+      relative: true
+    source: path
     version: "0.0.1"
   clock:
     dependency: transitive
@@ -136,7 +134,7 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.2"
+    version: "0.13.1"
   http_parser:
     dependency: transitive
     description:
@@ -151,13 +149,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.3"
-  logging:
-    dependency: transitive
-    description:
-      name: logging
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.1"
   matcher:
     dependency: transitive
     description:
@@ -289,20 +280,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
-  socket_io_client:
-    dependency: "direct main"
-    description:
-      name: socket_io_client
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
-  socket_io_common:
-    dependency: transitive
-    description:
-      name: socket_io_common
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
   source_span:
     dependency: transitive
     description:

@@ -18,25 +18,27 @@ class LoggerInterceptor extends Interceptor {
     try {
       Map jsonData = {
         'action': 'device_request',
-        'payload':  RequestPayload(
-          number: countRequest,
-          url: options.uri.toString(),
-          code: null,
-          method: options.method,
-          status: 'pending',
-          statusCode: null,
-          headers: options.headers,
-          headersResponse: {},
-          params: options.data,
-          payload: null,
-          action: 'getElementById',
-          createdAt: createdAt,
-          responseAt: null,
-          curl: curl,
-          size: null,
-          baseUrl: AppLogger().baseUrl,
-          install: AppLogger().install,
-        )
+        'payload': {
+          'device_identifier': AppLogger().deviceInfo?.identifier,
+          'session_id': AppLogger().sessionId,
+          'project': AppLogger().project,
+          'number': countRequest,
+          'url': options.uri.toString(),
+          'code': null,
+          "status": "pending",
+          "method": options.method,
+          'headers': options.headers,
+          'headers_response': {},
+          'params': options.data,
+          'response': null,
+          'action': 'getElementById',
+          'created_at': createdAt,
+          'response_at': null,
+          'size': null,
+          'payload': null,
+          'curl': curl,
+          'install': AppLogger().install,
+        }
       };
 
       final payload = jsonEncode(jsonData);
@@ -106,7 +108,6 @@ class LoggerInterceptor extends Interceptor {
       Map jsonData = {
         'action': 'device_request',
         'payload': RequestPayload(
-          install: AppLogger().install,
           number: number,
           url: options.uri.toString(),
           code: response.statusCode,
