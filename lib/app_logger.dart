@@ -24,6 +24,7 @@ part 'models/bloc/bloc_state_diff.dart';
 part 'models/device_info.dart';
 part 'models/message.dart';
 part 'utils/curl.dart';
+part 'app_bloc.dart';
 part 'utils/get_device_details.dart';
 
 class AppLogger {
@@ -132,11 +133,6 @@ class AppLogger {
           sendMessage(element);
         });
       }
-
-      channel.stream.listen((message) {
-        // print(message);
-        // channel.sink.close(status.goingAway);
-      });
     } else {
       print('[Logger] init, no connect remote, session $sessionId');
     }
@@ -158,11 +154,10 @@ class AppLogger {
     print("ReceiveData: $data");
   }
 
-  ///连接断开,进行重连
   void onClosed() {
-    print("websocket 已断开");
+    print("websocket close");
     new Future.delayed(Duration(seconds: 1), () {
-      print("websocket 重连。。。");
+      print("websocket restore connect");
       _doConnect();
     });
   }
@@ -183,80 +178,6 @@ class AppLogger {
   log(String message) {
     create();
     this.messagesStream.sink.add(Message('device_log', message));
-  }
-
-  addBloc(String name, state) {
-    create();
-
-    final bloc = BlocRecord(
-      number: blocs.length,
-      name: name,
-      state: state,
-      deviceInfo: deviceInfo,
-      project: project,
-      sessionId: sessionId,
-    );
-    this.blocs.add(bloc);
-
-    try {
-      this.messagesStream.sink.add(Message('onCreate', blocs));
-    } catch (err) {
-      if (!AppLogger().hideErrorBlocSerialize) {
-        debugPrint(err);
-      }
-    }
-  }
-
-  removeBloc(String name) {
-    create();
-
-    if (project == null) return;
-    final index = this.blocs.indexWhere((element) => element.name == name);
-    this.blocs.removeAt(index);
-
-    this.messagesStream.sink.add(Message('onClose', blocs));
-  }
-
-  onChangeBloc(String name, state1, state2) {
-    create();
-
-    if (project == null) return;
-    try {
-      this.messagesStream.sink.add(Message(
-          'onChange',
-          BlocStateDiff(
-            bloc: name,
-            currentState: state1,
-            nextState: state2,
-            eventName: null,
-            isBloc: false,
-          )));
-    } catch (e) {
-      if (!AppLogger().hideErrorBlocSerialize) {
-        print(e);
-      }
-    }
-  }
-
-  onTransitionBloc(String name, state1, state2, String eventName) {
-    create();
-
-    if (project == null) return;
-    try {
-      this.messagesStream.sink.add(Message(
-          'onTransition',
-          BlocStateDiff(
-            bloc: name,
-            currentState: state1,
-            nextState: state2,
-            eventName: eventName,
-            isBloc: true,
-          )));
-    } catch (e) {
-      if (!AppLogger().hideErrorBlocSerialize) {
-        print(e);
-      }
-    }
   }
 
   dispose() {
