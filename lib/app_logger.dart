@@ -77,19 +77,22 @@ class AppLogger {
   }
 
   init(String loggerUrl, String project, {bool hasConnect, String baseUrl, bool hideErrorBlocSerialize}) async {
-    create();
     this.loggerUrl = loggerUrl;
     this.project = project;
     this.baseUrl = baseUrl;
     this.hideErrorBlocSerialize = hideErrorBlocSerialize ?? this.hideErrorBlocSerialize;
 
+    var prefs = await SharedPreferences.getInstance();
+    this.install = prefs.getString('install') ?? generateRandomString(20);
+    prefs.setString('install', this.install);
+
     if (sessionId == 0) {
-      var prefs = await SharedPreferences.getInstance();
-      this.install = prefs.getInt('install') ?? generateRandomString(20);
       sessionId = prefs.getInt('sessionId') ?? sessionId;
       sessionId++;
       prefs.setInt('sessionId', sessionId);
     }
+
+    create();
 
     if (deviceInfo == null) {
       deviceInfo = await getDeviceDetails(
