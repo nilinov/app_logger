@@ -17,21 +17,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/io.dart';
 
 part 'app_logger_bloc_observer.dart';
-
 part 'logger_http.dart';
-
 part 'logger_interceptor.dart';
-
 part 'models/bloc/bloc_record.dart';
-
 part 'models/bloc/bloc_state_diff.dart';
-
 part 'models/device_info.dart';
-
 part 'models/message.dart';
-
 part 'utils/curl.dart';
-
 part 'utils/get_device_details.dart';
 
 class AppLogger {
@@ -49,6 +41,7 @@ class AppLogger {
   DeviceInfo deviceInfo;
   int sessionId = 0;
   IOWebSocketChannel channel;
+  WebSocketChannelState _state = WebSocketChannelState.connecting;
   String loggerUrl = '';
   String baseUrl = '';
   String install = '';
@@ -124,7 +117,12 @@ class AppLogger {
 
     if (canConnect) {
       print('[Logger] init, session $sessionId');
-      channel = IOWebSocketChannel.connect(loggerUrl);
+
+      if (this.channel != null && this._state != WebSocketChannelState.closed) {
+        dispose();
+      }
+
+      _doConnect();
       this.hasConnect = true;
 
       messages.add(Message('device_connect', deviceInfo));
@@ -141,6 +139,38 @@ class AppLogger {
       });
     } else {
       print('[Logger] init, no connect remote, session $sessionId');
+    }
+  }
+
+  void _doConnect() {
+    if (this.channel != null && this._state != WebSocketChannelState.closed) {
+      dispose();
+    }
+
+    this.channel = IOWebSocketChannel.connect(loggerUrl, pingInterval: Duration(seconds: 1));
+
+    _state = WebSocketChannelState.connecting;
+
+    this.channel.stream.listen(onReceiveData, onDone: onClosed, onError: onError, cancelOnError: false);
+  }
+
+  void onReceiveData(data) {
+    print("ReceiveData: $data");
+  }
+
+  ///连接断开,进行重连
+  void onClosed() {
+    print("websocket 已断开");
+    new Future.delayed(Duration(seconds: 1), () {
+      print("websocket 重连。。。");
+      _doConnect();
+    });
+  }
+
+  void onError(err, StackTrace stackTrace) {
+    print("websocket 出错:" + err.toString());
+    if (stackTrace != null) {
+      print(stackTrace);
     }
   }
 
@@ -232,6 +262,14 @@ class AppLogger {
   dispose() {
     create();
 
+    this.channel.sink.close();
+    this._state = WebSocketChannelState.closed;
+
     messagesStream?.close();
   }
+}
+
+enum WebSocketChannelState {
+  connecting,
+  closed,
 }
