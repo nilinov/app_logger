@@ -51,6 +51,7 @@ class AppLogger {
   StreamController messagesStream = new StreamController();
   bool hideErrorBlocSerialize = true;
   bool hasConnect = false;
+  SharedPreferences prefs;
 
   List messages = [];
 
@@ -67,7 +68,7 @@ class AppLogger {
         }
 
         if (hasConnect) {
-          channel.sink.add(event);
+          sendMessage(event);
         } else {
           messages.add(event);
         }
@@ -82,7 +83,7 @@ class AppLogger {
     this.baseUrl = baseUrl;
     this.hideErrorBlocSerialize = hideErrorBlocSerialize ?? this.hideErrorBlocSerialize;
 
-    var prefs = await SharedPreferences.getInstance();
+    prefs = await SharedPreferences.getInstance();
     this.install = prefs.getString('install') ?? generateRandomString(20);
     prefs.setString('install', this.install);
 
@@ -128,7 +129,7 @@ class AppLogger {
 
       if (messages.isNotEmpty) {
         messages.forEach((element) {
-          channel.sink.add(element);
+          sendMessage(element);
         });
       }
 
@@ -141,6 +142,10 @@ class AppLogger {
     }
   }
 
+  sendMessage(String message) {
+    channel.sink.add(message);
+  }
+
   List<BlocRecord> blocs = [];
 
   log(String message) {
@@ -150,6 +155,7 @@ class AppLogger {
       'action': 'device_log',
       'payload': {
         'identifier': deviceInfo?.identifier,
+        'install': install,
         'project': project,
         'sessionId': sessionId,
         'log': message,
