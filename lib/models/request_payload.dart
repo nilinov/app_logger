@@ -61,5 +61,6 @@ class RequestPayload {
         'size': size,
         'baseUrl': baseUrl,
         'install': install,
+        'base_url': baseUrl,
       };
 }

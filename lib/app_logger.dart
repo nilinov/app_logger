@@ -15,6 +15,7 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as Http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/io.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 part 'app_logger_bloc_observer.dart';
 part 'logger_http.dart';
@@ -43,7 +44,7 @@ class AppLogger {
 
   DeviceInfo deviceInfo;
   int sessionId = 0;
-  IOWebSocketChannel channel;
+  IO.Socket socket;
   String loggerUrl = '';
   String baseUrl = '';
   String install = '';
@@ -67,7 +68,7 @@ class AppLogger {
         }
 
         if (hasConnect) {
-          channel.sink.add(event);
+          socket.emit('msg', event);
         } else {
           messages.add(event);
         }
@@ -77,15 +78,18 @@ class AppLogger {
   }
 
   init(String loggerUrl, String project, {bool hasConnect, String baseUrl, bool hideErrorBlocSerialize}) async {
-    create();
     this.loggerUrl = loggerUrl;
     this.project = project;
     this.baseUrl = baseUrl;
     this.hideErrorBlocSerialize = hideErrorBlocSerialize ?? this.hideErrorBlocSerialize;
 
+    var prefs = await SharedPreferences.getInstance();
+    this.install = prefs.getString('install') ?? generateRandomString(20);
+    prefs.setString('install', this.install);
+
+    create();
+
     if (sessionId == 0) {
-      var prefs = await SharedPreferences.getInstance();
-      this.install = prefs.getInt('install') ?? generateRandomString(20);
       sessionId = prefs.getInt('sessionId') ?? sessionId;
       sessionId++;
       prefs.setInt('sessionId', sessionId);
@@ -115,7 +119,8 @@ class AppLogger {
 
     if (canConnect) {
       print('[Logger] init');
-      channel = IOWebSocketChannel.connect(loggerUrl);
+      socket = IO.io(loggerUrl);
+
       this.hasConnect = true;
 
       messages.add(jsonEncode({
@@ -125,13 +130,13 @@ class AppLogger {
 
       if (messages.isNotEmpty) {
         messages.forEach((element) {
-          channel.sink.add(element);
+          socket.emit('msg', element);
         });
       }
 
-      channel.stream.listen((message) {
-        // print(message);
-        // channel.sink.close(status.goingAway);
+      socket.onConnect((_) {
+        print('connect');
+        socket.emit('msg', 'test');
       });
     } else {
       print('[Logger] init, no connect remote');
@@ -148,6 +153,7 @@ class AppLogger {
       'payload': {
         'identifier': deviceInfo?.identifier,
         'project': project,
+        'install': install,
         'sessionId': sessionId,
         'log': message,
       },
