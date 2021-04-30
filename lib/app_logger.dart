@@ -17,16 +17,21 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/io.dart';
 
 part 'app_logger_bloc_observer.dart';
+
 part 'logger_http.dart';
+
 part 'logger_interceptor.dart';
+
 part 'models/bloc/bloc_record.dart';
+
 part 'models/bloc/bloc_state_diff.dart';
-part 'models/bloc/device_request_action_bloc_on_change.dart';
-part 'models/bloc/device_request_action_bloc_on_close.dart';
-part 'models/bloc/device_request_action_bloc_on_created.dart';
-part 'models/bloc/device_request_action_bloc_on_transition.dart';
+
 part 'models/device_info.dart';
+
+part 'models/message.dart';
+
 part 'utils/curl.dart';
+
 part 'utils/get_device_details.dart';
 
 class AppLogger {
@@ -48,12 +53,12 @@ class AppLogger {
   String baseUrl = '';
   String install = '';
   String project;
-  StreamController messagesStream = new StreamController();
+  StreamController<Message> messagesStream = new StreamController();
   bool hideErrorBlocSerialize = true;
   bool hasConnect = false;
   SharedPreferences prefs;
 
-  List messages = [];
+  List<Message> messages = <Message>[];
 
   create() {
     if (!isCreated) {
@@ -118,14 +123,11 @@ class AppLogger {
         hasConnect == true || (hasConnect == null && (await CheckKeyApp.isAppInstalled == true)) || isEmulator;
 
     if (canConnect) {
-      print('[Logger] init');
+      print('[Logger] init, session $sessionId');
       channel = IOWebSocketChannel.connect(loggerUrl);
       this.hasConnect = true;
 
-      messages.add(jsonEncode({
-        'action': 'device_connect',
-        'payload': deviceInfo,
-      }));
+      messages.add(Message('device_connect', deviceInfo));
 
       if (messages.isNotEmpty) {
         messages.forEach((element) {
@@ -138,31 +140,19 @@ class AppLogger {
         // channel.sink.close(status.goingAway);
       });
     } else {
-      print('[Logger] init, no connect remote');
+      print('[Logger] init, no connect remote, session $sessionId');
     }
   }
 
-  sendMessage(String message) {
-    channel.sink.add(message);
+  sendMessage(Message message) {
+    channel.sink.add(jsonEncode(message.toJson()));
   }
 
   List<BlocRecord> blocs = [];
 
   log(String message) {
     create();
-
-    final payload = jsonEncode({
-      'action': 'device_log',
-      'payload': {
-        'identifier': deviceInfo?.identifier,
-        'install': install,
-        'project': project,
-        'sessionId': sessionId,
-        'log': message,
-      },
-    });
-
-    this.messagesStream.sink.add(payload);
+    this.messagesStream.sink.add(Message('device_log', message));
   }
 
   addBloc(String name, state) {
@@ -178,18 +168,8 @@ class AppLogger {
     );
     this.blocs.add(bloc);
 
-    final blocJson = DeviceRequestActionBlocOnCreated(
-      payload: blocs,
-      deviceInfo: deviceInfo,
-      project: project,
-      sessionId: sessionId,
-      install: AppLogger().install,
-    ).toMap();
-
     try {
-      final payload = jsonEncode(blocJson);
-
-      this.messagesStream.sink.add(payload);
+      this.messagesStream.sink.add(Message('onCreate', blocs));
     } catch (err) {
       if (!AppLogger().hideErrorBlocSerialize) {
         debugPrint(err);
@@ -204,31 +184,23 @@ class AppLogger {
     final index = this.blocs.indexWhere((element) => element.name == name);
     this.blocs.removeAt(index);
 
-    final payload = jsonEncode(DeviceRequestActionBlocOnClose(payload: blocs).toMap());
-    this.messagesStream.sink.add(payload);
+    this.messagesStream.sink.add(Message('onClose', blocs));
   }
 
   onChangeBloc(String name, state1, state2) {
     create();
 
     if (project == null) return;
-    final change = DeviceRequestActionBlocOnChange(
-      payload: BlocStateDiff(
-        bloc: name,
-        currentState: state1,
-        nextState: state2,
-        eventName: null,
-        isBloc: false,
-      ),
-      deviceInfo: deviceInfo,
-      project: project,
-      sessionId: sessionId,
-      install: AppLogger().install,
-    );
-
     try {
-      final payload = jsonEncode(change);
-      this.messagesStream.sink.add(payload);
+      this.messagesStream.sink.add(Message(
+          'onChange',
+          BlocStateDiff(
+            bloc: name,
+            currentState: state1,
+            nextState: state2,
+            eventName: null,
+            isBloc: false,
+          )));
     } catch (e) {
       if (!AppLogger().hideErrorBlocSerialize) {
         print(e);
@@ -241,22 +213,15 @@ class AppLogger {
 
     if (project == null) return;
     try {
-      final change = DeviceRequestActionBlocOnTransition(
-        payload: BlocStateDiff(
-          bloc: name,
-          currentState: state1,
-          nextState: state2,
-          eventName: eventName,
-          isBloc: true,
-        ),
-        deviceInfo: deviceInfo,
-        project: project,
-        sessionId: sessionId,
-        install: AppLogger().install,
-      );
-
-      final payload = jsonEncode(change);
-      this.messagesStream.sink.add(payload);
+      this.messagesStream.sink.add(Message(
+          'onTransition',
+          BlocStateDiff(
+            bloc: name,
+            currentState: state1,
+            nextState: state2,
+            eventName: eventName,
+            isBloc: true,
+          )));
     } catch (e) {
       if (!AppLogger().hideErrorBlocSerialize) {
         print(e);

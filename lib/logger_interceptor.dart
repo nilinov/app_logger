@@ -16,31 +16,26 @@ class LoggerInterceptor extends Interceptor {
     });
 
     try {
-      Map jsonData = {
-        'action': 'device_request',
-        'payload':  RequestPayload(
-          number: countRequest,
-          url: options.uri.toString(),
-          code: null,
-          method: options.method,
-          status: 'pending',
-          statusCode: null,
-          headers: options.headers,
-          headersResponse: {},
-          params: options.data,
-          payload: null,
-          action: 'getElementById',
-          createdAt: createdAt,
-          responseAt: null,
-          curl: curl,
-          size: null,
-          baseUrl: AppLogger().baseUrl,
-          install: AppLogger().install,
-        )
-      };
-
-      final payload = jsonEncode(jsonData);
-      AppLogger().messagesStream.sink.add(payload);
+      final payload = RequestPayload(
+        number: countRequest,
+        url: options.uri.toString(),
+        code: null,
+        method: options.method,
+        status: 'pending',
+        statusCode: null,
+        headers: options.headers,
+        headersResponse: {},
+        params: options.data,
+        payload: null,
+        action: 'getElementById',
+        createdAt: createdAt,
+        responseAt: null,
+        curl: curl,
+        size: null,
+        baseUrl: AppLogger().baseUrl,
+        install: AppLogger().install,
+      );
+      AppLogger().messagesStream.sink.add(Message('device_request', payload));
     } catch (e) {
       print(e);
     }
@@ -60,31 +55,26 @@ class LoggerInterceptor extends Interceptor {
       var createdAt = options?.extra['createdAt'] ?? '';
       var curl = options?.extra['curl'] ?? '';
 
-      Map jsonData = {
-        'action': 'device_request',
-        'payload': RequestPayload(
-          number: number,
-          url: options.uri.toString(),
-          code: response.statusCode,
-          method: options.method,
-          status: 'done',
-          statusCode: response.statusCode,
-          headers: options.headers,
-          headersResponse: response.headers.map,
-          params: options.data,
-          payload: response.data,
-          action: 'getElementById',
-          createdAt: createdAt,
-          responseAt: responseAt,
-          curl: curl,
-          size: response.data.toString().length,
-          baseUrl: AppLogger().baseUrl,
-          install: AppLogger().install,
-        ),
-      };
-
-      final payload = jsonEncode(jsonData);
-      AppLogger().messagesStream.sink.add(payload);
+      final payload = RequestPayload(
+        number: number,
+        url: options.uri.toString(),
+        code: response.statusCode,
+        method: options.method,
+        status: 'done',
+        statusCode: response.statusCode,
+        headers: options.headers,
+        headersResponse: response.headers.map,
+        params: options.data,
+        payload: response.data,
+        action: 'getElementById',
+        createdAt: createdAt,
+        responseAt: responseAt,
+        curl: curl,
+        size: response.data.toString().length,
+        baseUrl: AppLogger().baseUrl,
+        install: AppLogger().install,
+      );
+      AppLogger().messagesStream.sink.add(Message('device_request', payload));
     } catch (e) {
       print(e);
     }
@@ -103,29 +93,26 @@ class LoggerInterceptor extends Interceptor {
       var createdAt = options?.extra['createdAt'] ?? '';
       var curl = options?.extra['curl'] ?? '';
 
-      Map jsonData = {
-        'action': 'device_request',
-        'payload': RequestPayload(
-          number: number,
-          url: options.uri.toString(),
-          code: response.statusCode,
-          method: options.method,
-          status: 'error',
-          statusCode: response.statusCode,
-          headers: options.headers,
-          headersResponse: response.headers.map,
-          params: options.data,
-          payload: response.data,
-          action: 'getElementById',
-          createdAt: createdAt,
-          responseAt: responseAt,
-          curl: curl,
-          size: response.data.toString().length,
-          baseUrl: AppLogger().baseUrl,
-        )
-      };
-      final payload = jsonEncode(jsonData);
-      AppLogger().messagesStream.sink.add(payload);
+      final payload = RequestPayload(
+        number: number,
+        url: options.uri.toString(),
+        code: response.statusCode,
+        method: options.method,
+        status: 'error',
+        statusCode: response.statusCode,
+        headers: options.headers,
+        headersResponse: response.headers.map,
+        params: options.data,
+        payload: response.data,
+        action: 'getElementById',
+        createdAt: createdAt,
+        responseAt: responseAt,
+        curl: curl,
+        size: response.data.toString().length,
+        baseUrl: AppLogger().baseUrl,
+        install: AppLogger().install,
+      );
+      AppLogger().messagesStream.sink.add(Message('device_request', payload));
     } catch (e) {
       print(e);
     }
