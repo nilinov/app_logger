@@ -23,7 +23,7 @@
       ref: a178190272d797a4ed1e804cc9d250f55fee8e07
 ```
 
-##Example:
+## Example:
 
 Класс AppEnv конфигурации приложения
 ```dart
@@ -44,14 +44,14 @@ AppLogger().init(
 );
 ```
 
-###http logger
+### http logger
 Подключение
 ```dart
     Dio _dio = Dio(BaseOptions(baseUrl: 'https://jsonplaceholder.typicode.com'));
     _dio.interceptors.add(LoggerInterceptor());
 ```
 
-###bloc logger
+### bloc logger
 Подключение
 ```dart
 void main() async {
