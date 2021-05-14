@@ -163,7 +163,7 @@ class AppLogger {
   }
 
   void onError(err, StackTrace stackTrace) {
-    print("websocket 出错:" + err.toString());
+    print("websocket:" + err.toString());
     if (stackTrace != null) {
       print(stackTrace);
     }
@@ -178,6 +178,11 @@ class AppLogger {
   log(String message) {
     create();
     this.messagesStream.sink.add(Message('device_log', message));
+  }
+
+  refreshCache(Map<String, dynamic> cache) {
+    create();
+    this.messagesStream.sink.add(Message('cache', cache));
   }
 
   dispose() {
