@@ -16,6 +16,7 @@ import 'package:http/http.dart' as Http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/io.dart';
 
+part 'app_bloc.dart';
 part 'app_logger_bloc_observer.dart';
 part 'logger_http.dart';
 part 'logger_interceptor.dart';
@@ -24,7 +25,6 @@ part 'models/bloc/bloc_state_diff.dart';
 part 'models/device_info.dart';
 part 'models/message.dart';
 part 'utils/curl.dart';
-part 'app_bloc.dart';
 part 'utils/get_device_details.dart';
 
 class AppLogger {
@@ -76,11 +76,13 @@ class AppLogger {
     }
   }
 
-  init(String loggerUrl, String project, {bool hasConnect, String baseUrl, bool hideErrorBlocSerialize}) async {
+  init(String loggerUrl, String project,
+      {bool hasConnect, String baseUrl, bool hideErrorBlocSerialize}) async {
     this.loggerUrl = loggerUrl;
     this.project = project;
     this.baseUrl = baseUrl;
-    this.hideErrorBlocSerialize = hideErrorBlocSerialize ?? this.hideErrorBlocSerialize;
+    this.hideErrorBlocSerialize =
+        hideErrorBlocSerialize ?? this.hideErrorBlocSerialize;
 
     prefs = await SharedPreferences.getInstance();
     this.install = prefs.getString('install') ?? generateRandomString(20);
@@ -113,8 +115,9 @@ class AppLogger {
         ? (await DeviceInfoPlugin().androidInfo).isPhysicalDevice == false
         : (await DeviceInfoPlugin().iosInfo).isPhysicalDevice == false;
 
-    final bool canConnect =
-        hasConnect == true || (hasConnect == null && (await CheckKeyApp.isAppInstalled == true)) || isEmulator;
+    final bool canConnect = hasConnect == true ||
+        (hasConnect == null && (await CheckKeyApp.isAppInstalled == true)) ||
+        isEmulator;
 
     if (canConnect) {
       print('[Logger] init, session $sessionId');
@@ -143,11 +146,13 @@ class AppLogger {
       dispose();
     }
 
-    this.channel = IOWebSocketChannel.connect(loggerUrl, pingInterval: Duration(seconds: 1));
+    this.channel = IOWebSocketChannel.connect(loggerUrl,
+        pingInterval: Duration(seconds: 1));
 
     _state = WebSocketChannelState.connecting;
 
-    this.channel.stream.listen(onReceiveData, onDone: onClosed, onError: onError, cancelOnError: false);
+    this.channel.stream.listen(onReceiveData,
+        onDone: onClosed, onError: onError, cancelOnError: false);
   }
 
   void onReceiveData(data) {
@@ -183,6 +188,15 @@ class AppLogger {
     try {
       create();
       this.messagesStream.sink.add(Message('device_log', message));
+    } catch (e) {
+      debugPrint(e);
+    }
+  }
+
+  refreshCache(Map<String, dynamic> cache) {
+    try {
+      create();
+      this.messagesStream.sink.add(Message('cache', cache));
     } catch (e) {
       debugPrint(e);
     }
