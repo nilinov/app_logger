@@ -30,7 +30,11 @@ extension AppBloc on AppLogger {
     final index = this.blocs.indexWhere((element) => element.name == name);
     this.blocs.removeAt(index);
 
-    this.messagesStream.sink.add(Message('onClose', blocs));
+    try {
+      this.messagesStream.sink.add(Message('onClose', blocs));
+    } catch (e) {
+      debugPrint(e);
+    }
   }
 
   onChangeBloc(String name, state1, state2) {
@@ -49,7 +53,7 @@ extension AppBloc on AppLogger {
           )));
     } catch (e) {
       if (!AppLogger().hideErrorBlocSerialize) {
-        print(e);
+        debugPrint(e);
       }
     }
   }
@@ -70,7 +74,7 @@ extension AppBloc on AppLogger {
           )));
     } catch (e) {
       if (!AppLogger().hideErrorBlocSerialize) {
-        print(e);
+        debugPrint(e);
       }
     }
   }

@@ -163,30 +163,33 @@ class AppLogger {
   }
 
   void onError(err, StackTrace stackTrace) {
-    print("websocket:" + err.toString());
+    print("websocket 出错:" + err.toString());
     if (stackTrace != null) {
       print(stackTrace);
     }
   }
 
   sendMessage(Message message) {
-    channel.sink.add(jsonEncode(message.toJson()));
+    try {
+      channel.sink.add(jsonEncode(message.toJson()));
+    } catch (e) {
+      debugPrint(e);
+    }
   }
 
   List<BlocRecord> blocs = [];
 
   log(String message) {
-    create();
-    this.messagesStream.sink.add(Message('device_log', message));
-  }
-
-  refreshCache(Map<String, dynamic> cache) {
-    create();
-    this.messagesStream.sink.add(Message('cache', cache));
+    try {
+      create();
+      this.messagesStream.sink.add(Message('device_log', message));
+    } catch (e) {
+      debugPrint(e);
+    }
   }
 
   dispose() {
-    create();
+    // create();
 
     this.channel.sink.close();
     this._state = WebSocketChannelState.closed;
