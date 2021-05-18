@@ -55,6 +55,9 @@ class AppLogger {
   List<Message> messages = <Message>[];
 
   create() {
+    if (messagesStream.isClosed) {
+      messagesStream = new StreamController();
+    }
     if (!isCreated) {
       messagesStream.stream.listen((event) async {
         if (deviceInfo == null) {
