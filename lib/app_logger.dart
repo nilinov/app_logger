@@ -180,7 +180,7 @@ class AppLogger {
     try {
       channel!.sink.add(jsonEncode(message.toJson()));
     } catch (e) {
-      debugPrint(e);
+      debugPrint(e?.toString());
     }
   }
 
@@ -191,7 +191,7 @@ class AppLogger {
       create();
       this.messagesStream.sink.add(Message('device_log', message));
     } catch (e) {
-      debugPrint(e);
+      debugPrint(e?.toString());
     }
   }
 
@@ -200,7 +200,7 @@ class AppLogger {
       create();
       this.messagesStream.sink.add(Message('cache', cache));
     } catch (e) {
-      debugPrint(e);
+      debugPrint(e?.toString());
     }
   }
 
