@@ -1,10 +1,10 @@
 part of app_logger;
 
-Future<DeviceInfo> getDeviceDetails({
-  @required String baseUrl,
-  @required String project,
-  @required String install,
-  @required int session,
+Future<DeviceInfo?> getDeviceDetails({
+  required String? baseUrl,
+  required String? project,
+  required String install,
+  required int session,
 }) async {
   final DeviceInfoPlugin deviceInfoPlugin = new DeviceInfoPlugin();
   var res;

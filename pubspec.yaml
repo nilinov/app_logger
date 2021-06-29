@@ -4,25 +4,25 @@ version: 0.0.1
 author: Nicolay Ilinov
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
   flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  web_socket_channel: ^2.0.0
-  flutter_bloc: ^7.0.0
+  web_socket_channel: ^2.1.0
+  flutter_bloc: ^7.0.1
   bloc: ^7.0.0
   dio: ^4.0.0
-  device_info: ^2.0.0
-  shared_preferences: ^2.0.5
-  http: ^0.13.1
+  device_info: ^2.0.2
+  shared_preferences: ^2.0.6
+  http: ^0.13.3
 
   check_key_app:
   #  path: ../check_key_app
     git:
       url: https://gitlab.com/nic.ilinov/check_key_app.git
-      ref: c3b3d63106d1b71036ad593ab70b36941924b85e
+      ref: ae38bb4218b1b3926c6e749f576882ef6c3d1dab
 
 dev_dependencies:
   flutter_test:

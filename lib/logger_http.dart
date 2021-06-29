@@ -11,7 +11,7 @@ class LoggerHttp {
   List requests = [];
 
   onRequest(url, String method,
-      {Map<String, String> headers, Map<String, dynamic> params, Future<Http.Response> request}) async {
+      {Map<String, String>? headers, Map<String, dynamic>? params, Future<Http.Response>? request}) async {
     final createdAt = DateTime.now().toIso8601String();
 
     requests.add({
@@ -74,12 +74,12 @@ class LoggerHttp {
         'session_id': AppLogger().sessionId,
         'project': AppLogger().project,
         'number': _extra['number'],
-        'url': response.request.url.toString(),
+        'url': response.request!.url.toString(),
         'code': response.statusCode,
-        'method': response.request.method,
+        'method': response.request!.method,
         "status": 'done',
         "status_code": response.statusCode,
-        'headers': response.request.headers,
+        'headers': response.request!.headers,
         'headers_response': response.headers,
         'params': _extra['params'],
         'payload': response.body,

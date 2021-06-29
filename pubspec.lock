@@ -7,7 +7,7 @@ packages:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.5.0"
+    version: "2.6.1"
   bloc:
     dependency: "direct main"
     description:
@@ -40,8 +40,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: c3b3d63106d1b71036ad593ab70b36941924b85e
-      resolved-ref: c3b3d63106d1b71036ad593ab70b36941924b85e
+      ref: ae38bb4218b1b3926c6e749f576882ef6c3d1dab
+      resolved-ref: ae38bb4218b1b3926c6e749f576882ef6c3d1dab
       url: "https://gitlab.com/nic.ilinov/check_key_app.git"
     source: git
     version: "0.0.1"
@@ -72,7 +72,7 @@ packages:
       name: device_info
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.2"
   device_info_platform_interface:
     dependency: transitive
     description:
@@ -119,7 +119,7 @@ packages:
       name: flutter_bloc
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "7.0.0"
+    version: "7.0.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -136,7 +136,7 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.1"
+    version: "0.13.3"
   http_parser:
     dependency: transitive
     description:
@@ -241,7 +241,7 @@ packages:
       name: shared_preferences
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.5"
+    version: "2.0.6"
   shared_preferences_linux:
     dependency: transitive
     description:
@@ -288,7 +288,7 @@ packages:
       name: source_span
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.0"
+    version: "1.8.1"
   stack_trace:
     dependency: transitive
     description:
@@ -323,7 +323,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.19"
+    version: "0.3.0"
   typed_data:
     dependency: transitive
     description:
@@ -344,7 +344,7 @@ packages:
       name: web_socket_channel
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.1.0"
   win32:
     dependency: transitive
     description:
