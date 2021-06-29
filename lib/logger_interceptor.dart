@@ -84,7 +84,7 @@ class LoggerInterceptor extends Interceptor {
 
   @override
   onError(DioError err, ErrorInterceptorHandler handler) {
-    var response = err.response;
+    var response = err.response!;
     try {
       final responseAt = DateTime.now().toIso8601String();
       final options = response.requestOptions;

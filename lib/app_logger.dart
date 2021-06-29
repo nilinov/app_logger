@@ -29,7 +29,7 @@ part 'utils/get_device_details.dart';
 
 class AppLogger {
   static final AppLogger _singleton = AppLogger._internal();
-  String path;
+  String? path;
 
   bool isCreated = false;
 
@@ -39,18 +39,18 @@ class AppLogger {
 
   AppLogger._internal();
 
-  DeviceInfo deviceInfo;
+  DeviceInfo? deviceInfo;
   int sessionId = 0;
-  IOWebSocketChannel channel;
+  IOWebSocketChannel? channel;
   WebSocketChannelState _state = WebSocketChannelState.connecting;
   String loggerUrl = '';
-  String baseUrl = '';
+  String? baseUrl = '';
   String install = '';
-  String project;
+  String? project;
   StreamController<Message> messagesStream = new StreamController();
   bool hideErrorBlocSerialize = true;
   bool hasConnect = false;
-  SharedPreferences prefs;
+  late SharedPreferences prefs;
 
   List<Message> messages = <Message>[];
 
@@ -80,7 +80,7 @@ class AppLogger {
   }
 
   init(String loggerUrl, String project,
-      {bool hasConnect, String baseUrl, bool hideErrorBlocSerialize}) async {
+      {bool? hasConnect, String? baseUrl, bool? hideErrorBlocSerialize}) async {
     this.loggerUrl = loggerUrl;
     this.project = project;
     this.baseUrl = baseUrl;
@@ -107,7 +107,7 @@ class AppLogger {
         install: install,
       );
     } else {
-      deviceInfo = deviceInfo.update(
+      deviceInfo = deviceInfo!.update(
         project: project,
         session: sessionId,
         baseUrl: baseUrl,
@@ -154,8 +154,7 @@ class AppLogger {
 
     _state = WebSocketChannelState.connecting;
 
-    this.channel.stream.listen(onReceiveData,
-        onDone: onClosed, onError: onError, cancelOnError: false);
+    this.channel!.stream.listen(onReceiveData, onDone: onClosed, onError: onError, cancelOnError: false);
   }
 
   void onReceiveData(data) {
@@ -179,7 +178,7 @@ class AppLogger {
 
   sendMessage(Message message) {
     try {
-      channel.sink.add(jsonEncode(message.toJson()));
+      channel!.sink.add(jsonEncode(message.toJson()));
     } catch (e) {
       debugPrint(e);
     }
@@ -208,7 +207,7 @@ class AppLogger {
   dispose() {
     // create();
 
-    this.channel.sink.close();
+    this.channel!.sink.close();
     this._state = WebSocketChannelState.closed;
 
     messagesStream?.close();

@@ -1,14 +1,14 @@
 part of app_logger;
 
 class DeviceInfo {
-  String uuid;
-  String deviceName;
-  String deviceVersion;
-  String identifier;
-  String product;
-  String project;
-  int session;
-  String baseUrl;
+  String? uuid;
+  String? deviceName;
+  String? deviceVersion;
+  String? identifier;
+  String? product;
+  String? project;
+  int? session;
+  String? baseUrl;
   String install;
 
   DeviceInfo(
@@ -29,14 +29,14 @@ class DeviceInfo {
   }
 
   update({
-    String uuid,
-    String deviceName,
-    String deviceVersion,
-    String identifier,
-    String product,
-    String project,
-    int session,
-    String baseUrl,
+    String? uuid,
+    String? deviceName,
+    String? deviceVersion,
+    String? identifier,
+    String? product,
+    String? project,
+    int? session,
+    String? baseUrl,
   }) {
     this.uuid = uuid ?? this.baseUrl;
     this.deviceName = deviceName ?? this.baseUrl;
@@ -44,7 +44,7 @@ class DeviceInfo {
     this.identifier = identifier ?? this.baseUrl;
     this.product = product ?? this.baseUrl;
     this.project = project ?? this.baseUrl;
-    this.session = session ?? this.baseUrl;
+    this.session = session ?? this.baseUrl as int?;
     this.baseUrl = baseUrl ?? this.baseUrl;
     this.install = install ?? this.install;
   }
