@@ -18,7 +18,7 @@ extension AppBloc on AppLogger {
       this.messagesStream.sink.add(Message('onCreate', blocs));
     } catch (err) {
       if (!AppLogger().hideErrorBlocSerialize) {
-        debugPrint(err?.toString());
+        debugPrint(err.toString());
       }
     }
   }
@@ -33,7 +33,7 @@ extension AppBloc on AppLogger {
     try {
       this.messagesStream.sink.add(Message('onClose', blocs));
     } catch (e) {
-      debugPrint(e?.toString());
+      debugPrint(e.toString());
     }
   }
 
@@ -53,7 +53,7 @@ extension AppBloc on AppLogger {
           )));
     } catch (e) {
       if (!AppLogger().hideErrorBlocSerialize) {
-        debugPrint(e?.toString());
+        debugPrint(e.toString());
       }
     }
   }
@@ -74,7 +74,7 @@ extension AppBloc on AppLogger {
           )));
     } catch (e) {
       if (!AppLogger().hideErrorBlocSerialize) {
-        debugPrint(e?.toString());
+        debugPrint(e.toString());
       }
     }
   }

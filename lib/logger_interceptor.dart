@@ -51,9 +51,9 @@ class LoggerInterceptor extends Interceptor {
 
       final options = response.requestOptions;
 
-      var number = int.parse(options?.extra['number'] ?? '0');
-      var createdAt = options?.extra['createdAt'] ?? '';
-      var curl = options?.extra['curl'] ?? '';
+      var number = int.parse(options.extra['number'] ?? '0');
+      var createdAt = options.extra['createdAt'] ?? '';
+      var curl = options.extra['curl'] ?? '';
 
       final payload = RequestPayload(
         number: number,
@@ -89,9 +89,9 @@ class LoggerInterceptor extends Interceptor {
       final responseAt = DateTime.now().toIso8601String();
       final options = response.requestOptions;
 
-      var number = int.parse(options?.extra['number'] ?? '0');
-      var createdAt = options?.extra['createdAt'] ?? '';
-      var curl = options?.extra['curl'] ?? '';
+      var number = int.parse(options.extra['number'] ?? '0');
+      var createdAt = options.extra['createdAt'] ?? '';
+      var curl = options.extra['curl'] ?? '';
 
       final payload = RequestPayload(
         number: number,

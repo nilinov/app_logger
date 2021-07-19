@@ -107,10 +107,11 @@ class AppLogger {
         install: install,
       );
     } else {
-      deviceInfo = deviceInfo!.update(
+      deviceInfo = deviceInfo!.copyWith(
         project: project,
         session: sessionId,
         baseUrl: baseUrl,
+        install: install,
       );
     }
 
@@ -170,17 +171,15 @@ class AppLogger {
   }
 
   void onError(err, StackTrace stackTrace) {
-    print("websocket 出错:" + err.toString());
-    if (stackTrace != null) {
-      print(stackTrace);
-    }
+    print("websocket error:" + err.toString());
+    print(stackTrace);
   }
 
   sendMessage(Message message) {
     try {
       channel!.sink.add(jsonEncode(message.toJson()));
     } catch (e) {
-      debugPrint(e?.toString());
+      debugPrint(e.toString());
     }
   }
 
@@ -191,7 +190,7 @@ class AppLogger {
       create();
       this.messagesStream.sink.add(Message('device_log', message));
     } catch (e) {
-      debugPrint(e?.toString());
+      debugPrint(e.toString());
     }
   }
 
@@ -200,7 +199,7 @@ class AppLogger {
       create();
       this.messagesStream.sink.add(Message('cache', cache));
     } catch (e) {
-      debugPrint(e?.toString());
+      debugPrint(e.toString());
     }
   }
 
@@ -210,7 +209,7 @@ class AppLogger {
     this.channel!.sink.close();
     this._state = WebSocketChannelState.closed;
 
-    messagesStream?.close();
+    messagesStream.close();
   }
 }
 

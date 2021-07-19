@@ -1,5 +1,4 @@
 import 'package:app_logger/app_logger.dart';
-import 'package:flutter/cupertino.dart';
 
 class RequestPayload {
   final number;
