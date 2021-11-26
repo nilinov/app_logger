@@ -28,7 +28,7 @@ class DeviceInfo {
     return json.encode(toJson());
   }
 
-  update({
+  copyWith({
     String? uuid,
     String? deviceName,
     String? deviceVersion,
@@ -37,16 +37,19 @@ class DeviceInfo {
     String? project,
     int? session,
     String? baseUrl,
+    String? install,
   }) {
-    this.uuid = uuid ?? this.baseUrl;
-    this.deviceName = deviceName ?? this.baseUrl;
-    this.deviceVersion = deviceVersion ?? this.baseUrl;
-    this.identifier = identifier ?? this.baseUrl;
-    this.product = product ?? this.baseUrl;
-    this.project = project ?? this.baseUrl;
-    this.session = session ?? this.baseUrl as int?;
-    this.baseUrl = baseUrl ?? this.baseUrl;
-    this.install = install ?? this.install;
+    return DeviceInfo(
+      uuid ?? this.uuid,
+      deviceName ?? this.deviceName,
+      deviceVersion ?? this.deviceVersion,
+      identifier ?? this.identifier,
+      product ?? this.product,
+      project ?? this.project,
+      session ?? this.session,
+      baseUrl ?? this.baseUrl,
+      install ?? this.install,
+    );
   }
 
   toJson() {
