@@ -9,12 +9,27 @@ class Message<Payload> {
     this.payload,
   );
 
-  Map<String, dynamic> toJson() => {
-    "action": action,
-    "payload": payload,
-    "deviceInfo": AppLogger().deviceInfo,
-    "project": AppLogger().project,
-    "sessionId": AppLogger().sessionId,
-    "install": AppLogger().install,
-  };
+  Map<String, dynamic> toJson() {
+    var payloadJson;
+
+    try {
+      payloadJson = (payload as dynamic).toJson();
+    } catch (err) {
+      try {
+        payloadJson = (payload as dynamic).toMap();
+      } catch (err) {
+        debugPrint(err.toString());
+        payloadJson = payload.toString();
+      }
+    }
+
+    return {
+      "action": action,
+      "payload": payloadJson,
+      "deviceInfo": AppLogger().deviceInfo,
+      "project": AppLogger().project,
+      "sessionId": AppLogger().sessionId,
+      "install": AppLogger().install,
+    };
+  }
 }
