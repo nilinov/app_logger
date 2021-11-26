@@ -20,7 +20,10 @@ String cURLRepresentationDio(RequestOptions options) {
       components.add("-d $data");
     }
 
-    components.add("\"${options.uri.toString()}\"");
+    if (options.method == "POST")
+      components.add("\"${options.path}\"");
+    else
+      components.add("\"${options.uri.toString()}\"");
 
     return components.join('\\\n\t');
   } catch (err) {
