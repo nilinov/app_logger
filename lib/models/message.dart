@@ -12,14 +12,18 @@ class Message<Payload> {
   Map<String, dynamic> toJson() {
     var payloadJson;
 
-    try {
-      payloadJson = (payload as dynamic).toJson();
-    } catch (err) {
+    if (payload is List || payload is int || payload is String || payload is double || payload is bool) {
+      payloadJson = payload;
+    } else {
       try {
-        payloadJson = (payload as dynamic).toMap();
+        payloadJson = (payload as dynamic).toJson();
       } catch (err) {
-        debugPrint(err.toString());
-        payloadJson = payload.toString();
+        try {
+          payloadJson = (payload as dynamic).toMap();
+        } catch (err) {
+          debugPrint(err.toString());
+          payloadJson = payload.toString();
+        }
       }
     }
 
