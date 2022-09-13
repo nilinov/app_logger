@@ -20,7 +20,7 @@
   app_logger:
     git:
       url: https://github.com/nilinov/app_logger.git
-      ref: 6a608eeb
+      ref: 1067fd7c
 ```
 
 ##Example:
