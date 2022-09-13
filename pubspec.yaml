@@ -11,8 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   web_socket_channel: ^2.1.0
-  flutter_bloc: ^7.0.1
-  bloc: ^7.0.0
+  flutter_bloc: ^8.0.0
   dio: ^4.0.0
   device_info: ^2.0.2
   shared_preferences: ^2.0.6
