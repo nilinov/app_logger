@@ -83,7 +83,9 @@ class AppLogger {
 
     Timer.periodic(Duration(seconds: 1), (timer) {
       if (hasConnect) {
-        sendMessage(messages);
+        if (messages.isNotEmpty) {
+          sendMessage(messages);
+        }
       }
     });
   }
