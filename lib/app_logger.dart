@@ -15,14 +15,23 @@ import 'package:http/http.dart' as Http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'app_bloc.dart';
+
 part 'app_logger_bloc_observer.dart';
+
 part 'logger_http.dart';
+
 part 'logger_interceptor.dart';
+
 part 'models/bloc/bloc_record.dart';
+
 part 'models/bloc/bloc_state_diff.dart';
+
 part 'models/device_info.dart';
+
 part 'models/message.dart';
+
 part 'utils/curl.dart';
+
 part 'utils/get_device_details.dart';
 
 class AppLogger {
@@ -48,6 +57,7 @@ class AppLogger {
   bool hasConnect = false;
   late SharedPreferences prefs;
   late Options httpOptions;
+  DateTime lastSend = DateTime.now();
 
   List<Message> messages = <Message>[];
 
@@ -66,23 +76,23 @@ class AppLogger {
           );
         }
 
-        if (hasConnect) {
-          sendMessage(event);
-        } else {
-          messages.add(event);
-        }
+        messages.add(event);
       });
       isCreated = true;
     }
+
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      if (hasConnect) {
+        sendMessage(messages);
+      }
+    });
   }
 
-  init(String loggerUrl, String project,
-      {bool? hasConnect, String? baseUrl, bool? hideErrorBlocSerialize}) async {
+  init(String loggerUrl, String project, {bool? hasConnect, String? baseUrl, bool? hideErrorBlocSerialize}) async {
     this.loggerUrl = loggerUrl;
     this.project = project;
     this.baseUrl = baseUrl;
-    this.hideErrorBlocSerialize =
-        hideErrorBlocSerialize ?? this.hideErrorBlocSerialize;
+    this.hideErrorBlocSerialize = hideErrorBlocSerialize ?? this.hideErrorBlocSerialize;
 
     prefs = await SharedPreferences.getInstance();
     this.install = prefs.getString('install') ?? generateRandomString(20);
@@ -128,18 +138,16 @@ class AppLogger {
       messages.add(Message('device_connect', deviceInfo));
 
       if (messages.isNotEmpty) {
-        messages.forEach((element) {
-          sendMessage(element);
-        });
+        sendMessage(messages);
       }
     } else {
       print('[Logger] init, no connect remote, session $sessionId');
     }
   }
 
-  sendMessage(Message message) {
+  sendMessage(List<Message> messages) {
     try {
-      Dio().post(loggerUrl + '/request', data: jsonEncode(message.toJson()), options: httpOptions);
+      Dio().post(loggerUrl + '/request', data: messages, options: httpOptions);
     } catch (e) {
       debugPrint(e.toString());
     }

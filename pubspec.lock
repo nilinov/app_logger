@@ -36,15 +36,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.1"
-  check_key_app:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: ae38bb4218b1b3926c6e749f576882ef6c3d1dab
-      resolved-ref: ae38bb4218b1b3926c6e749f576882ef6c3d1dab
-      url: "https://gitlab.com/nic.ilinov/check_key_app.git"
-    source: git
-    version: "0.0.1"
   clock:
     dependency: transitive
     description:
@@ -59,13 +50,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.16.0"
-  crypto:
-    dependency: transitive
-    description:
-      name: crypto
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.1"
   device_info:
     dependency: "direct main"
     description:
@@ -345,13 +329,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.2"
-  web_socket_channel:
-    dependency: "direct main"
-    description:
-      name: web_socket_channel
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.0"
   win32:
     dependency: transitive
     description:
