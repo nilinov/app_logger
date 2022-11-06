@@ -84,7 +84,7 @@ class AppLogger {
     Timer.periodic(Duration(seconds: 1), (timer) {
       if (hasConnect) {
         if (messages.isNotEmpty) {
-          sendMessage(messages);
+          sendMessage([...messages]);
           messages.clear();
         }
       }
@@ -141,7 +141,7 @@ class AppLogger {
       messages.add(Message('device_connect', deviceInfo));
 
       if (messages.isNotEmpty) {
-        sendMessage(messages);
+        sendMessage([...messages]);
         messages.clear();
       }
     } else {
