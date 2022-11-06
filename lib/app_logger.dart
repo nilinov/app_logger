@@ -7,14 +7,12 @@ import 'dart:io';
 import 'package:app_logger/models/request_payload.dart';
 import 'package:app_logger/utils/generate_random_string.dart';
 import 'package:bloc/bloc.dart';
-import 'package:check_key_app/check_key_app.dart';
 import 'package:device_info/device_info.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as Http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:web_socket_channel/io.dart';
 
 part 'app_bloc.dart';
 part 'app_logger_bloc_observer.dart';
