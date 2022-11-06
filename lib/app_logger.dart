@@ -85,6 +85,7 @@ class AppLogger {
       if (hasConnect) {
         if (messages.isNotEmpty) {
           sendMessage(messages);
+          messages.clear();
         }
       }
     });
@@ -141,6 +142,7 @@ class AppLogger {
 
       if (messages.isNotEmpty) {
         sendMessage(messages);
+        messages.clear();
       }
     } else {
       print('[Logger] init, no connect remote, session $sessionId');
