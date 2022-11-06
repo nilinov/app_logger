@@ -41,8 +41,6 @@ class AppLogger {
 
   DeviceInfo? deviceInfo;
   int sessionId = 0;
-  IOWebSocketChannel? channel;
-  WebSocketChannelState _state = WebSocketChannelState.connecting;
   String loggerUrl = '';
   String? baseUrl = '';
   String install = '';
@@ -51,6 +49,7 @@ class AppLogger {
   bool hideErrorBlocSerialize = true;
   bool hasConnect = false;
   late SharedPreferences prefs;
+  late Options httpOptions;
 
   List<Message> messages = <Message>[];
 
@@ -119,19 +118,14 @@ class AppLogger {
         ? (await DeviceInfoPlugin().androidInfo).isPhysicalDevice == false
         : (await DeviceInfoPlugin().iosInfo).isPhysicalDevice == false;
 
-    final bool canConnect = hasConnect == true ||
-        (hasConnect == null && (await CheckKeyApp.isAppInstalled == true)) ||
-        isEmulator;
+    final bool canConnect = hasConnect == true || isEmulator;
 
     if (canConnect) {
       print('[Logger] init, session $sessionId');
 
-      if (this.channel != null && this._state != WebSocketChannelState.closed) {
-        dispose();
-      }
-
-      _doConnect();
       this.hasConnect = true;
+
+      httpOptions = Options(headers: {'install': install, 'project': project, 'sessionId': sessionId});
 
       messages.add(Message('device_connect', deviceInfo));
 
@@ -145,39 +139,9 @@ class AppLogger {
     }
   }
 
-  void _doConnect() {
-    if (this.channel != null && this._state != WebSocketChannelState.closed) {
-      dispose();
-    }
-
-    this.channel = IOWebSocketChannel.connect(loggerUrl,
-        pingInterval: Duration(seconds: 1));
-
-    _state = WebSocketChannelState.connecting;
-
-    this.channel!.stream.listen(onReceiveData, onDone: onClosed, onError: onError, cancelOnError: false);
-  }
-
-  void onReceiveData(data) {
-    print("ReceiveData: $data");
-  }
-
-  void onClosed() {
-    print("websocket close");
-    new Future.delayed(Duration(seconds: 1), () {
-      print("websocket restore connect");
-      _doConnect();
-    });
-  }
-
-  void onError(err, StackTrace stackTrace) {
-    print("websocket error:" + err.toString());
-    print(stackTrace);
-  }
-
   sendMessage(Message message) {
     try {
-      channel!.sink.add(jsonEncode(message.toJson()));
+      Dio().post(loggerUrl + '/request', data: jsonEncode(message.toJson()), options: httpOptions);
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -204,16 +168,6 @@ class AppLogger {
   }
 
   dispose() {
-    // create();
-
-    this.channel!.sink.close();
-    this._state = WebSocketChannelState.closed;
-
     messagesStream.close();
   }
-}
-
-enum WebSocketChannelState {
-  connecting,
-  closed,
 }

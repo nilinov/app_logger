@@ -10,18 +10,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  web_socket_channel: ^2.1.0
   flutter_bloc: ^8.0.0
   dio: ^4.0.0
   device_info: ^2.0.2
   shared_preferences: ^2.0.6
   http: ^0.13.3
-
-  #  path: ../check_key_app
-  check_key_app:
-    git:
-      url: https://gitlab.com/nic.ilinov/check_key_app.git
-      ref: ae38bb4218b1b3926c6e749f576882ef6c3d1dab
 
 dev_dependencies:
   flutter_test:
