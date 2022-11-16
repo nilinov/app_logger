@@ -149,9 +149,9 @@ class AppLogger {
     }
   }
 
-  sendMessage(List<Message> messages) {
+  sendMessage(List<Message> messages) async {
     try {
-      Dio().post(loggerUrl + '/request', data: messages, options: httpOptions);
+      await Dio().post(loggerUrl + '/request', data: messages, options: httpOptions);
     } catch (e) {
       debugPrint(e.toString());
     }
