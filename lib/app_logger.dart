@@ -58,6 +58,7 @@ class AppLogger {
   late SharedPreferences prefs;
   late Options httpOptions;
   DateTime lastSend = DateTime.now();
+  int durationSend = 1;
 
   List<Message> messages = <Message>[];
 
@@ -81,7 +82,7 @@ class AppLogger {
       isCreated = true;
     }
 
-    Timer.periodic(Duration(seconds: 1), (timer) {
+    Timer.periodic(Duration(seconds: durationSend), (timer) {
       if (hasConnect) {
         if (messages.isNotEmpty) {
           sendMessage([...messages]);
@@ -91,11 +92,13 @@ class AppLogger {
     });
   }
 
-  init(String loggerUrl, String project, {bool? hasConnect, String? baseUrl, bool? hideErrorBlocSerialize}) async {
+  init(String loggerUrl, String project, {bool? hasConnect, String? baseUrl, bool? hideErrorBlocSerialize, int? durationSend})
+  async {
     this.loggerUrl = loggerUrl;
     this.project = project;
     this.baseUrl = baseUrl;
     this.hideErrorBlocSerialize = hideErrorBlocSerialize ?? this.hideErrorBlocSerialize;
+    this.durationSend = durationSend ?? this.durationSend;
 
     prefs = await SharedPreferences.getInstance();
     this.install = prefs.getString('install') ?? generateRandomString(20);
