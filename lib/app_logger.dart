@@ -154,7 +154,19 @@ class AppLogger {
 
   sendMessage(List<Message> messages) async {
     try {
-      await Dio().post(loggerUrl + '/request', data: messages, options: httpOptions);
+      var payload = [];
+
+      messages.forEach((element) {
+        try {
+          jsonEncode(element);
+          payload.add(element);
+        } catch(e) {
+          print('Не могу отправить в логгер сообщение');
+          print(e);
+        }
+      });
+
+      await Dio().post(loggerUrl + '/request', data: payload, options: httpOptions);
     } catch (e) {
       debugPrint(e.toString());
     }
