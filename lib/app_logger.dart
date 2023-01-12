@@ -158,7 +158,7 @@ class AppLogger {
 
       messages.forEach((element) {
         try {
-          jsonEncode(element);
+          jsonEncode(element.payload);
           payload.add(element);
         } catch(e) {
           print('Не могу отправить в логгер сообщение');
