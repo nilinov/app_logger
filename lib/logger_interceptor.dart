@@ -112,6 +112,7 @@ class LoggerInterceptor extends Interceptor {
         install: AppLogger().install,
       );
       AppLogger().messagesStream.sink.add(Message('device_request', payload));
+      return super.onError(err, handler);
     }
 
     var response = err.response!;
