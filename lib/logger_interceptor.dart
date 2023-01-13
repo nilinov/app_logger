@@ -84,6 +84,36 @@ class LoggerInterceptor extends Interceptor {
 
   @override
   onError(DioError err, ErrorInterceptorHandler handler) {
+    if (err.response == null) {
+      final responseAt = DateTime.now().toIso8601String();
+      final options = err.requestOptions;
+
+      var number = int.parse(options.extra['number'] ?? '0');
+      var createdAt = options.extra['createdAt'] ?? '';
+      var curl = options.extra['curl'] ?? '';
+
+      final payload = RequestPayload(
+        number: number,
+        url: options.uri.toString(),
+        code: 0,
+        method: options.method,
+        status: 'error',
+        statusCode: 0,
+        headers: options.headers,
+        headersResponse: {},
+        params: options.data,
+        payload: {},
+        action: 'getElementById',
+        createdAt: createdAt,
+        responseAt: responseAt,
+        curl: curl,
+        size: 0,
+        baseUrl: AppLogger().baseUrl,
+        install: AppLogger().install,
+      );
+      AppLogger().messagesStream.sink.add(Message('device_request', payload));
+    }
+
     var response = err.response!;
     try {
       final responseAt = DateTime.now().toIso8601String();
