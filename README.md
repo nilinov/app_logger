@@ -2,13 +2,13 @@
 
 Пакет предназначен для логирования http запросов через Interceptor пакета dio.
 Так же возможно отслеживать состояние приложения (bloc, cubit).
-Данные сохраняются на  сервере логирования, их возможно просмотреть позже.
+Данные сохраняются на сервере логирования, их возможно просмотреть позже.
 
-Для просмотра логов возможно использовать центральный сервер логирования (https://logging.network/) или же развернуть свой.
-Так же можно ограничено логировать приложения, выгруженные в store. 
+Для просмотра логов возможно использовать центральный сервер логирования (https://logger.itmegastar.com/) или же развернуть свой.
+Так же можно ограничено логировать приложения, выгруженные в store.
 
-Для этого неоходимо пропустить параметр `hasConnect` в конфигурации и поставить на телефон ключ-приложение для разрешения логирования. 
-Без установки ключ приложения логгировнаие не будет производиться.
+Для этого необходимо пропустить параметр `hasConnect` в конфигурации и поставить на телефон ключ-приложение для разрешения логирования.
+Без установки ключ приложения логирование не будет производиться.
 
 Для логирования состояния необходимо наличия свойства toJson в каждом классе (bloc / state / cubit).
 
@@ -20,16 +20,16 @@
   app_logger:
     git:
       url: https://github.com/nilinov/app_logger.git
-      ref: a178190272d797a4ed1e804cc9d250f55fee8e07
+      ref: d3c75cc711da92c754d884a8c8824d7802accbb1
 ```
 
-## Example:
+##Example:
 
 Класс AppEnv конфигурации приложения
 ```dart
 class AppEnv {
-  static const BackendUrl = 'https://develop.checkers.itmegastar.com/api/v1';
-  static const loggerUrl = 'wss://ws.logging.network';
+  static const BackendUrl = 'https://example.itmegastar.com/api/v1';
+  static const loggerUrl = 'https://logging.network';
   static const loggerProject = 'Hello World';
 }
 ```
@@ -44,14 +44,14 @@ AppLogger().init(
 );
 ```
 
-### http logger
+###http logger
 Подключение
 ```dart
     Dio _dio = Dio(BaseOptions(baseUrl: 'https://jsonplaceholder.typicode.com'));
     _dio.interceptors.add(LoggerInterceptor());
 ```
 
-### bloc logger
+###bloc logger
 Подключение
 ```dart
 void main() async {
