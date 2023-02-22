@@ -4,7 +4,7 @@
 Так же возможно отслеживать состояние приложения (bloc, cubit).
 Данные сохраняются на сервере логирования, их возможно просмотреть позже.
 
-Для просмотра логов возможно использовать центральный сервер логирования (https://logging.network/) или же развернуть свой.
+Для просмотра логов возможно использовать центральный сервер логирования (https://logger.itmegastar.com/) или же развернуть свой.
 Так же можно ограничено логировать приложения, выгруженные в store. 
 
 Для этого необходимо пропустить параметр `hasConnect` в конфигурации и поставить на телефон ключ-приложение для разрешения логирования. 
@@ -20,7 +20,7 @@
   app_logger:
     git:
       url: https://github.com/nilinov/app_logger.git
-      ref: 1067fd7c
+      ref: d3c75cc711da92c754d884a8c8824d7802accbb1
 ```
 
 ##Example:
@@ -28,8 +28,8 @@
 Класс AppEnv конфигурации приложения
 ```dart
 class AppEnv {
-  static const BackendUrl = 'https://develop.checkers.itmegastar.com/api/v1';
-  static const loggerUrl = 'wss://ws.logging.network';
+  static const BackendUrl = 'https://example.itmegastar.com/api/v1';
+  static const loggerUrl = 'https://logging.network';
   static const loggerProject = 'Hello World';
 }
 ```
