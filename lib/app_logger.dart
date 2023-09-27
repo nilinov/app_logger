@@ -166,7 +166,7 @@ class AppLogger {
         }
       });
 
-      await Dio().post(loggerUrl + '/request', data: payload, options: httpOptions);
+      await Dio().post(loggerUrl + '/request', data: jsonEncode(payload), options: httpOptions);
     } catch (e) {
       debugPrint(e.toString());
     }
