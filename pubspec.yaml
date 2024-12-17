@@ -14,7 +14,7 @@ dependencies:
   flutter_bloc: ^8.0.1
   bloc: ^8.0.0
   dio: ^4.0.0
-  device_info: ^2.0.2
+  device_info_plus: ^7.0.0	
   shared_preferences: ^2.0.6
   http: ^0.13.3
 
