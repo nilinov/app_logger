@@ -15,7 +15,7 @@ Future<DeviceInfo?> getDeviceDetails({
       res = DeviceInfo(
         build.id,
         build.model,
-        build.version.toString(),
+        "${build.version.release} ${build.version.sdkInt} ${build.version.incremental} ${build.version.codename} ${build.version.baseOS} ${build.version.previewSdkInt}",
         build.id, //UUID for Androi,
         build.product,
         project,
@@ -43,4 +43,3 @@ Future<DeviceInfo?> getDeviceDetails({
 
   return res;
 }
-
