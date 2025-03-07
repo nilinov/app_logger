@@ -6,17 +6,17 @@ Future<DeviceInfo?> getDeviceDetails({
   required String install,
   required int session,
 }) async {
-  final DeviceInfoPlugin deviceInfoPlugin = new DeviceInfoPlugin();
+  final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   var res;
 
   try {
     if (Platform.isAndroid) {
       var build = await deviceInfoPlugin.androidInfo;
       res = DeviceInfo(
-        build.androidId,
+        build.id,
         build.model,
-        "${build.version.release} ${build.version.sdkInt} ${build.version.codename} ${build.version.incremental}",
-        build.androidId, //UUID for Androi,
+        build.version.toString(),
+        build.id, //UUID for Androi,
         build.product,
         project,
         session,
